@@ -1,3 +1,13 @@
+## Fairer Bible/affirmation voice check and greyed-out alarms — 11 October 2026
+
+- **Percentage check:** a Bible verse passes when about 75% of its words are heard in order (affirmations 80%). Extra words ("um", the reference, repeats) no longer count against you.
+- **Near-misses accepted:** word endings (strengthen/strengthens), small mishearings (Crist/Christ), numbers (4/four) and sound-alikes (know/no, to/two, there/their, your/you're) match.
+- **Read in parts:** words already heard stay counted (shown in green) if the microphone stops at a pause, and the message tells you the percentage done and the word to continue from.
+- **Meaning protected:** skipping a "not / no / never / cannot / without / nor" from the text, or adding one, never passes.
+- **Microphone:** listens in your region's English (en-NG on Nigerian phones), waits longer through pauses (3 s), uses partial results, and checks the words heard so far when Android stops listening early instead of failing.
+- **Alarms:** switched-off alarms are clearly greyed out (grey time, text and icon on a flatter card) in light and dark mode.
+- New tests cover the speech scoring, partial reading, negation guard and the native partial-result handling.
+
 ## Alarm sounds trimmed and louder; full-name greeting — 10 October 2026
 
 - Removed five sounds that were too soft or calming to wake you: Reawakening, At Rest, Inspired, Stream & birds and Amazing Grace 2011 (20 sounds remain, every category still has at least one). Alarms that used a removed sound now play the default (Happy Alley).

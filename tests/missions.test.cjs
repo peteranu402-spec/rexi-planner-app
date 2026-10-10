@@ -29,6 +29,20 @@ assert.equal(ctx.similarity('I need to be perfect','I do not need to be perfect'
 assert.ok(ctx.similarity('learn to ready am I','I am ready to learn')<0.8);
 assert.ok(ctx.similarity('I can','I can learn and I can improve')<0.8);
 assert.ok(ctx.similarity('I can learn with steady practice','I can learn through steady practice')>=0.8);
+// Forgiving spoken check: percentage of the text heard in order, near-misses accepted, negations protected.
+{const P=(said,target,prev)=>ctx.speechProgress(said.split('|'),target,prev);const v='I can do all things through Christ who strengthens me.';
+ assert.ok(P('I can do all things through Crist who strengthen me',v).pass(0.75),'small mishearings and word endings pass');
+ assert.ok(P('um I can do all things through Christ who strengthens me Philippians four thirteen',v).pass(0.75),'extra words do not count against you');
+ assert.ok(!P('I can do things',v).pass(0.75),'too little of the verse does not pass');
+ assert.ok(!P('banana phone yesterday window',v).pass(0.75),'unrelated words never pass');
+ const long='Trust in the Lord with all your heart, and lean not on your own understanding; in all your ways acknowledge Him, and He shall direct your paths.';
+ const first=P('trust in the lord with all your heart and lean not on your own understanding',long);assert.ok(!first.pass(0.75),'half a long verse is not enough yet');
+ assert.ok(first.nextWord==='in','next word to read is reported');
+ assert.ok(P('in all your ways acknowledge him and he shall direct your paths',long,first.flags).pass(0.75),'a long verse can be finished in a second attempt');
+ assert.ok(!P('trust in the lord with all your heart and lean on your own understanding in all your ways acknowledge him and he shall direct your paths',long).pass(0.75),'skipping "not" never passes');
+ assert.ok(P('there is know fear in love but perfect love casts out fear','There is no fear in love; but perfect love casts out fear.').pass(0.75),'know/no sound-alike is accepted');
+ assert.ok(!P('I am not ready to learn','I am ready to learn.').pass(0.8),'adding a negation never passes');
+ assert.ok(P('I am ready to learn','I’m ready to learn.').pass(0.8),'contractions still match');}
 // Only Math keeps the chosen difficulty; other missions randomise it every round.
 {const seen=new Set();for(let i=0;i<60;i++){mission('memory',null,{level:'easy'});seen.add(ctx.newTask().digits.length);}assert.ok(seen.size>1,'memory difficulty is randomised, not fixed to the saved level');}
 for(let i=0;i<20;i++){mission('math',null,{level:'easy'});const t=ctx.newTask();assert.ok(!/×/.test(t.q),'math keeps the chosen easy level');}

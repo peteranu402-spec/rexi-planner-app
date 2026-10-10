@@ -18,7 +18,9 @@ public class NativeSpeechTest {
     }
     static class RecognizerIntent {
         static final String ACTION_RECOGNIZE_SPEECH="recognize",EXTRA_LANGUAGE_MODEL="model",
-            LANGUAGE_MODEL_FREE_FORM="free",EXTRA_MAX_RESULTS="max",EXTRA_LANGUAGE="lang";
+            LANGUAGE_MODEL_FREE_FORM="free",EXTRA_MAX_RESULTS="max",EXTRA_LANGUAGE="lang",
+            EXTRA_LANGUAGE_PREFERENCE="pref",EXTRA_PARTIAL_RESULTS="partial",EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS="silence",
+            EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS="maybe";
     }
     static class SpeechRecognizer {
         static final String RESULTS_RECOGNITION="results";
@@ -66,6 +68,12 @@ public class NativeSpeechTest {
         check(b.messages.get(1).endsWith("(9,\"retry\")"),"retry error carries token");
         b.enabled=false;b.listenMission("unavailable");check(b.messages.get(2).endsWith("(-1,\"unavailable\")"),"unavailable microphone reports correct request");
         b.enabled=true;b.listen();b.recognizer.listener.onResults(result("legacy"));check(b.messages.get(3).endsWith("\"legacy\",null)"),"legacy bridge remains compatible");
+        b.listenMission("pause");SpeechRecognizer p=b.recognizer;
+        check(Boolean.TRUE.equals(p.intent.extras.get("partial"))&&Long.valueOf(3000L).equals(p.intent.extras.get("silence")),"partial results and longer pause tolerance requested");
+        p.listener.onPartialResults(result("trust in the lord with all your heart"));p.listener.onError(7);
+        check(b.messages.get(b.messages.size()-1).contains("trust in the lord with all your heart\",\"pause\""),"words heard before a pause are checked instead of failing");
+        b.listenMission("trim");SpeechRecognizer q=b.recognizer;q.listener.onPartialResults(result("long partial text"));q.listener.onResults(result("long"));
+        check(b.messages.get(b.messages.size()-1).contains("long|long partial text"),"longer partial text is offered as an alternative");
         System.out.println("Native speech request tokens, cancellation, retries and resource release passed (simulated Android callbacks).");
     }
 }

@@ -132,11 +132,23 @@ public class AlarmBridge {
                     @Override public void onRmsChanged(float rmsdB) {}
                     @Override public void onBufferReceived(byte[] buffer) {}
                     @Override public void onEndOfSpeech() {}
-                    @Override public void onPartialResults(Bundle partialResults) {}
+                    @Override public void onPartialResults(Bundle partialResults) {
+                        // Keep what was heard so far: if the recogniser stops at a pause, these words still count.
+                        ArrayList<String> p = partialResults == null ? null : partialResults.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
+                        if (recognizer == request && p != null && !p.isEmpty() && p.get(0) != null && p.get(0).trim().length() > 0) lastPartial = p.get(0);
+                    }
                     @Override public void onEvent(int eventType, Bundle params) {}
 
                     @Override public void onError(int error) {
                         if (recognizer != request) return;
+                        String heard = lastPartial;
+                        if ((error == 6 || error == 7) && heard != null && heard.trim().length() > 0) {
+                            // Timed out or "no match" after hearing some words: check those words instead of failing.
+                            destroyRecognizer();
+                            AlarmService.resumeAfterSpeech();
+                            sendToPage("window.__onSpeech&&window.__onSpeech(" + JSONObject.quote(heard.replace("|", " ")) + "," + token + ")");
+                            return;
+                        }
                         destroyRecognizer();
                         AlarmService.resumeAfterSpeech();
                         sendToPage("window.__onSpeechError&&window.__onSpeechError(" + error + "," + token + ")");
@@ -150,6 +162,11 @@ public class AlarmBridge {
                             if (sb.length() > 0) sb.append('|');
                             sb.append(r.replace("|", " "));
                         }
+                        // The last partial can be longer than the final text when the recogniser trims it.
+                        if (lastPartial != null && lastPartial.trim().length() > 0) {
+                            if (sb.length() > 0) sb.append('|');
+                            sb.append(lastPartial.replace("|", " "));
+                        }
                         destroyRecognizer();
                         AlarmService.resumeAfterSpeech();
                         sendToPage("window.__onSpeech&&window.__onSpeech(" + JSONObject.quote(sb.toString()) + "," + token + ")");
@@ -158,7 +175,14 @@ public class AlarmBridge {
                 Intent i = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
                 i.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
                 i.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 5);
-                i.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "en-US");
+                String lang = speechLanguage();
+                i.putExtra(RecognizerIntent.EXTRA_LANGUAGE, lang);
+                i.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, lang);
+                i.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
+                // Wait longer before deciding you've finished, so a breath between phrases doesn't cut the verse.
+                i.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, 3000L);
+                i.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS, 2500L);
+                lastPartial = null;
                 AlarmService.pauseForSpeech();
                 request.startListening(i);
             } catch (Exception e) {
@@ -167,6 +191,18 @@ public class AlarmBridge {
                 sendToPage("window.__onSpeechError&&window.__onSpeechError(-2," + token + ")");
             }
         });
+    }
+
+    private volatile String lastPartial;
+
+    /** English for your region (e.g. en-NG on Nigerian phones) so accents are recognised better; en-US otherwise. */
+    private String speechLanguage() {
+        java.util.Locale l = java.util.Locale.getDefault();
+        String country = l.getCountry() == null ? "" : l.getCountry().toUpperCase(java.util.Locale.ROOT);
+        if (!country.isEmpty() && java.util.Arrays.asList("NG", "GH", "KE", "ZA", "GB", "IN", "AU", "CA", "IE", "NZ", "PH", "SG", "TZ", "UG").contains(country)) {
+            return "en-" + country;
+        }
+        return "en-US";
     }
 
     /** Short vibration feedback for missions: "wrong" = strong double buzz, anything else = light tap. */

@@ -120,6 +120,8 @@ nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:6;display:flex;justify-c
 .pad{padding:18px}
 .h-sec{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:0 2px 10px}
 .al-head{position:relative;align-items:center}
+.said{color:#2E9E5B;font-weight:inherit}
+.wk-verse .said,.verse .said{color:#4CC97E}
 .ico{display:inline-flex;vertical-align:-3px;margin-right:6px}
 .ico svg{display:block}
 .sc-ic svg,.cloud-ic svg{display:block;margin:auto}
@@ -641,6 +643,11 @@ body.sheet-open .fab,body.focus-open .fab,body.alarm-mode .fab{display:none}
 .ar-mission{display:inline-flex;align-items:center;flex:none;color:var(--muted)}
 .ar-mission .mission-icon,.ar-mission svg{color:var(--muted)!important;width:24px;height:24px}
 .ar-name{margin-top:8px;font:500 12px var(--sans);color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* Switched-off alarms: clearly greyed out (time, text and icon in grey, flatter card), not just slightly faded. */
+.alarm-list .alarm-row.off{opacity:1;background:var(--surface-2)}
+.alarm-list .alarm-row.off .ar-time,.alarm-list .alarm-row.off .ar-time small,.alarm-list .alarm-row.off .ar-name,.alarm-list .alarm-row.off .ar-sub{color:var(--faint)}
+.alarm-list .alarm-row.off .ar-mission .mission-icon,.alarm-list .alarm-row.off .ar-mission svg{color:var(--faint)!important;opacity:.7}
+.alarm-list .alarm-row.off .ar-main{filter:grayscale(1)}
 .alarm-list .switch{background:var(--surface-3);border:0;width:46px;height:28px}
 .alarm-list .switch::after{width:24px;height:24px;left:2px;top:2px;background:#fff}
 .alarm-list .switch.on{background:var(--brand)}
@@ -3053,6 +3060,44 @@ function similarity(said,target){
 function numericAnswer(v){const text=String(v==null?'':v).trim();return /^[+-]?(?:\d+(?:\.\d*)?|\.\d+)$/.test(text)&&Number.isFinite(Number(text))?Number(text):null;}
 function pickDifferent(items,previous,key=v=>v){const alternatives=items.filter(v=>key(v)!==previous);return pick(alternatives.length?alternatives:items);}
 function missionReady(){return !!(M&&M.phase==='task'&&M.task&&!M.flashing);}
+/* ---- forgiving speech check: percentage of the verse heard in order ---- */
+var SPEECH_NEG=['not','no','never','cannot','without','nor'];
+var SPEECH_NUM={zero:'0',one:'1',two:'2',three:'3',four:'4',five:'5',six:'6',seven:'7',eight:'8',nine:'9',ten:'10',eleven:'11',twelve:'12',thirteen:'13',fourteen:'14',fifteen:'15',sixteen:'16',seventeen:'17',eighteen:'18',nineteen:'19',twenty:'20',thirty:'30',forty:'40',fifty:'50',hundred:'100',thousand:'1000',first:'1st',second:'2nd',third:'3rd'};
+// Words the microphone often swaps for one that sounds the same.
+var SPEECH_SAME={know:'no',knew:'new',to:'2',too:'2',two:'2',for:'4',four:'4',fore:'4',their:'there',theyre:'there',your:'you',youre:'you',ur:'you',u:'you',right:'write',rite:'write',peace:'piece',whole:'hole',sun:'son',heal:'heel',hear:'here',our:'hour',one:'1',won:'1',be:'b',see:'c',sea:'c',ok:'okay',lord:'lord',thee:'the',thy:'the',thine:'the',hath:'has',doth:'does'};
+function speechCanon(w){w=String(w).replace(/'/g,'');if(SPEECH_NUM[w])w=SPEECH_NUM[w];return SPEECH_SAME[w]||w;}
+function speechStem(w){return w.length>5?w.replace(/(ing|edly|ed|es|ly|s)$/,''):w.length>3?w.replace(/s$/,''):w;}
+function editDist(a,b){if(Math.abs(a.length-b.length)>2)return 9;let p=Array.from({length:b.length+1},(_,i)=>i);for(let i=1;i<=a.length;i++){const c=[i];for(let j=1;j<=b.length;j++)c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1));p=c;}return p[b.length];}
+function speechWordEq(a,b){
+  if(a===b)return true;const x=speechCanon(a),y=speechCanon(b);if(x===y)return true;
+  if(SPEECH_NEG.includes(a)||SPEECH_NEG.includes(b))return false; // never blur a negation
+  if(speechStem(x)===speechStem(y))return true;
+  const n=Math.min(x.length,y.length);return n>=5&&editDist(x,y)<=(n>=9?2:1);
+}
+/* Align what was heard with the text (in order) and mark the text words that were said. */
+function speechAlign(said,tw){
+  const sw=speechWords(said),n=sw.length,m=tw.length,d=Array.from({length:n+1},()=>new Array(m+1).fill(0));
+  for(let i=1;i<=n;i++)for(let j=1;j<=m;j++)d[i][j]=speechWordEq(sw[i-1],tw[j-1])?d[i-1][j-1]+1:Math.max(d[i-1][j],d[i][j-1]);
+  const hit=new Array(m).fill(false);let i=n,j=m;
+  while(i>0&&j>0){if(speechWordEq(sw[i-1],tw[j-1])&&d[i][j]===d[i-1][j-1]+1){hit[j-1]=true;i--;j--;}else if(d[i-1][j]>=d[i][j-1])i--;else j--;}
+  const extraNeg=SPEECH_NEG.some(w=>sw.filter(x=>x===w).length>tw.filter(x=>x===w).length);
+  return {hit,extraNeg};
+}
+function speechProgress(alts,target,prev){
+  const tw=speechWords(target),m=tw.length;let flags=prev&&prev.length===m?prev.slice():new Array(m).fill(false),best=null,extraNeg=false;
+  for(const a of alts){const r=speechAlign(a,tw);const c=r.hit.filter(Boolean).length;if(!r.extraNeg&&(!best||c>best.c))best={c,hit:r.hit};if(r.extraNeg&&!best)extraNeg=true;}
+  if(best)flags=flags.map((f,k)=>f||best.hit[k]);
+  const score=m?flags.filter(Boolean).length/m:0;
+  const missingNeg=tw.find((w,k)=>SPEECH_NEG.includes(w)&&!flags[k]);
+  const nk=flags.indexOf(false);
+  return {flags,score,blocked:extraNeg&&!best?'':(score>=0.6&&missingNeg)||'',nextWord:nk>=0?tw[nk]:'',
+    pass:th=>m>0&&score>=th&&!missingNeg&&!(extraNeg&&!best)};
+}
+/* The verse / affirmation with already-counted words shown in green. */
+function spokenTextHTML(t){
+  const flags=t.heard;if(!flags||!flags.some(Boolean))return esc(t.q);
+  let k=0;return String(t.q).split(/(\s+)/).map(tok=>{if(/^\s+$/.test(tok)||!tok)return tok;const n=speechWords(tok).length;const ok=n>0&&flags.slice(k,k+n).every(Boolean);k+=n;return ok?'<span class="said">'+esc(tok)+'</span>':esc(tok);}).join('');
+}
 function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
 
 let alarmTimer=null,alarmStopT=null,snoozeT=null,current=null,M=null;
@@ -3127,7 +3172,7 @@ function wkScreen(t,fb){
   if(SPOKEN(t.type)){
     const isB=t.type==='bible',tag=isB?(t.step==='nlt'?'<div class="wk-tag">✓ '+(t.mine?'Verse':'NKJV')+' done · now in the NLT</div>':''):'';
     const head=isB?esc(t.ref)+(t.mine?'':t.step==='nlt'?' · NLT':' · NKJV'):'Affirmation';
-    h+=wkDots()+'<div class="wk-card'+(bad?' bad':good?' good':'')+'"><div class="wk-ref">'+head+'</div>'+tag+'<div class="wk-verse">'+esc(t.q)+'</div>'+(isB&&t.step==='nlt'?'<div class="wk-credit">NLT © Tyndale House Foundation. Used by permission.</div>':'')+msg+'</div>';
+    h+=wkDots()+'<div class="wk-card'+(bad?' bad':good?' good':'')+'"><div class="wk-ref">'+head+'</div>'+tag+'<div class="wk-verse">'+spokenTextHTML(t)+'</div>'+(isB&&t.step==='nlt'?'<div class="wk-credit">NLT © Tyndale House Foundation. Used by permission.</div>':'')+msg+'</div>';
     if(canSpeak())h+='<div class="wk-micwrap"><button class="wk-mic'+(t.listening?' on':'')+'" data-action="speak" aria-label="Tap and read aloud">'+svg('mic',26,2.2)+'</button><div class="wk-cap">'+(t.listening?'Listening…':isB?'Read aloud to turn off your alarm':'Say it aloud to turn off your alarm')+'</div>'+((M.micFails|0)>=3?'<button class="wk-link" data-action="noMic">Mic not working? Solve math instead</button>':'')+'</div>';
     else h+='<div class="wk-micwrap"><button class="wk-pill" data-action="allowMic">Allow microphone</button><button class="wk-link" data-action="noMic">Can’t use the mic? Solve math instead</button></div>';
     return h+'</div></div>';
@@ -3182,9 +3227,9 @@ function renderTask(t){
     case 'question':h+=(t.course?'<div class="mcourse">'+esc(t.course)+'</div>':'')+'<div class="mq small">'+esc(t.q)+'</div>'+form('Your answer');break;
     case 'type':h+='<div class="mq small">'+esc(t.q)+'</div>'+form('Type the sentence above');break;
     case 'affirm':case 'bible':
-      h+=t.type!=='bible'?'<div class="mq small affirm">“'+esc(t.q)+'”</div>'
-        :t.step==='nlt'?'<div class="nlt-tag">✓ '+(t.mine?'Verse':'NKJV')+' done · Now say it in the NLT</div><div class="verse">'+esc(t.q)+'</div><div class="vref">'+esc(t.ref)+' (NLT)</div><div class="nlt-credit">NLT © Tyndale House Foundation. Used by permission.</div>'
-        :'<div class="verse">'+esc(t.q)+'</div><div class="vref">'+esc(t.ref)+(t.mine?'':' (NKJV)')+'</div>';
+      h+=t.type!=='bible'?'<div class="mq small affirm">'+spokenTextHTML(t)+'</div>'
+        :t.step==='nlt'?'<div class="nlt-tag">✓ '+(t.mine?'Verse':'NKJV')+' done · Now say it in the NLT</div><div class="verse">'+spokenTextHTML(t)+'</div><div class="vref">'+esc(t.ref)+' (NLT)</div><div class="nlt-credit">NLT © Tyndale House Foundation. Used by permission.</div>'
+        :'<div class="verse">'+spokenTextHTML(t)+'</div><div class="vref">'+esc(t.ref)+(t.mine?'':' (NKJV)')+'</div>';
       if(canSpeak())h+='<button class="btn btn-primary mic'+(t.listening?' on':'')+'" data-action="speak">'+(t.listening?ico('mic',18)+'Listening… say it now':ico('mic',18)+'Tap, then say it out loud')+'</button>'+((M.micFails|0)>=3?'<button class="link-light" data-action="noMic">Mic not working? Solve math instead</button>':'');
       else h+='<p class="mhint">Rexi Rise needs your microphone to hear you.</p><button class="btn btn-primary mic" data-action="allowMic">'+ico('mic',18)+'Allow microphone</button><button class="link-light" data-action="noMic">Can’t use the mic? Solve math instead</button>';
       break;
@@ -3325,15 +3370,20 @@ function onSpeech(text,request){
   const t=M.task;t.listening=false;
   if(!IS_APP&&current&&!webQuiet())startWebSound(current);
   const alts=String(text||'').split('|').filter(Boolean);
-  const best=alts.length?Math.max(...alts.map(a=>similarity(a,t.q))):0;
-  if(best>=(t.type==='affirm'?0.85:0.8)){
+  // Keep the words already heard (a long verse can be read in parts), add the best of this attempt.
+  const prog=speechProgress(alts,t.q,t.heard);t.heard=prog.flags;
+  if(prog.pass(t.type==='affirm'?0.8:0.75)){
     // Bible: after the NKJV, say it again in the NLT for better understanding (when we have it).
     if(t.type==='bible'&&t.step!=='nlt'){const n=NLT[String(t.ref||'').trim()];
-      if(n){t.step='nlt';t.first=t.q;t.q=n;M.micFails=0;M.msg='';buzz('right');drawAlarm();
+      if(n){t.step='nlt';t.first=t.q;t.q=n;t.heard=null;M.micFails=0;M.msg='';buzz('right');drawAlarm();
         playVoiceAlert('bible_nlt',true);return;}}
     missionStep();return;}
   M.micFails=(M.micFails|0)+1;
-  M.msg=alts.length?'I heard: “'+alts[0]+'”. Try again, clearly and a little slower.':'I didn’t catch that. Try again.';
+  const pct=Math.round(prog.score*100),next=prog.nextWord;
+  M.msg=!alts.length?'I didn’t catch that. Try again.'
+    :prog.blocked?'Don’t skip “'+prog.blocked+'” — it changes the meaning. Try again.'
+    :pct>=20&&next?pct+'% done — keep going from “'+next+'”. The green words are already counted.'
+    :'I heard: “'+alts[0]+'”. Try again, clearly and a little slower.';
   buzz('wrong');drawAlarm(true);
 }
 function speechFail(error,request){

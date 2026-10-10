@@ -16,7 +16,7 @@ assert.equal(calls.length,count,'muted study alerts and excluded resume stay sil
 ctx.playVoiceAlert('bible_nlt',true);assert.equal(calls.at(-1),'bible_nlt','Bible instructions remain independent of study voice setting');
 // Exercise the real NKJV acceptance handler, rather than matching its source text.
 Object.assign(ctx,{SPOKEN:t=>t==='bible',M:{phase:'task',task:{type:'bible',q:'NKJV verse',ref:'John 3:16'},micFails:1},NLT:{'John 3:16':'NLT verse'},similarity:(a,b)=>a===b?1:0.1,buzz(){},drawAlarm(){},missionStep:()=>calls.push('mission_done'),current:null});
-vm.runInContext(html.slice(html.indexOf('function missionReady('),html.indexOf('function shuffle(')),ctx);
+vm.runInContext(html.slice(html.indexOf('const normAns='),html.indexOf('function shuffle(')),ctx);
 vm.runInContext(html.slice(html.indexOf('function speechReady('),html.indexOf('function startSpeech(')),ctx);
 vm.runInContext(html.slice(html.indexOf('function onSpeech('),html.indexOf('function speechFail(')),ctx);
 ctx.M.task.listening=true;ctx.onSpeech('NKJV verse');assert.equal(ctx.M.task.step,'nlt');assert.equal(calls.at(-1),'bible_nlt');
