@@ -22,7 +22,7 @@ html,body{font-stretch:100%}
 :root{
   --bg:#F4EFE6; --surface:#FFFDF9; --surface-2:#F8F3EA; --surface-3:#EFE7DA;
   --ink:#1F1A16; --ink-2:#3B342D; --muted:#6F665C; --faint:#A1978A; --line:#E7DFD1;
-  --accent:#C4572F; --accent-ink:#fff; --brand:#C4572F; --brand-ink:#fff; --accent-soft:#F8E4D9; --accent-2:#E8925F;
+  --accent:#C4572F; --accent-ink:#fff; --brand:#C4572F; --brand-ink:#fff; --btn:#1F1A16; --btn-ink:#fff; --accent-soft:#F8E4D9; --accent-2:#E8925F;
   --hero:#221C17; --hero-ink:#F7F0E6; --hero-muted:#BDAF9E;
   --hard:#D32F2F; --hard-soft:#FDE3E3; --hard-ink:#B71C1C;
   --semi:#E8A400; --semi-soft:#FFF3CF; --semi-ink:#8A5D00;
@@ -37,7 +37,7 @@ html,body{font-stretch:100%}
   :root:not([data-theme="light"]){
     --bg:#000000; --surface:#1C1C1E; --surface-2:#232325; --surface-3:#2C2C2E;
     --ink:#FFFFFF; --ink-2:#E5E5E7; --muted:#9A9AA0; --faint:#636366; --line:#2C2C2E;
-    --accent:#FFFFFF; --accent-ink:#000000; --brand:#E2734A; --brand-ink:#fff; --accent-soft:#2C2C2E; --accent-2:#F08A5D;
+    --accent:#FFFFFF; --accent-ink:#000000; --brand:#E2734A; --brand-ink:#fff; --btn:#FFFFFF; --btn-ink:#000; --accent-soft:#2C2C2E; --accent-2:#F08A5D;
     --hero:#1C1C1E; --hero-ink:#FFFFFF; --hero-muted:#A1A1A6;
     --hard:#FF6B6B; --hard-soft:#3A1E1E; --hard-ink:#FF8A8A;
     --semi:#FFC233; --semi-soft:#3A3120; --semi-ink:#FFD36B;
@@ -50,7 +50,7 @@ html,body{font-stretch:100%}
 :root[data-theme="dark"]{
     --bg:#000000; --surface:#1C1C1E; --surface-2:#232325; --surface-3:#2C2C2E;
     --ink:#FFFFFF; --ink-2:#E5E5E7; --muted:#9A9AA0; --faint:#636366; --line:#2C2C2E;
-    --accent:#FFFFFF; --accent-ink:#000000; --brand:#E2734A; --brand-ink:#fff; --accent-soft:#2C2C2E; --accent-2:#F08A5D;
+    --accent:#FFFFFF; --accent-ink:#000000; --brand:#E2734A; --brand-ink:#fff; --btn:#FFFFFF; --btn-ink:#000; --accent-soft:#2C2C2E; --accent-2:#F08A5D;
     --hero:#1C1C1E; --hero-ink:#FFFFFF; --hero-muted:#A1A1A6;
     --hard:#FF6B6B; --hard-soft:#3A1E1E; --hard-ink:#FF8A8A;
     --semi:#FFC233; --semi-soft:#3A3120; --semi-ink:#FFD36B;
@@ -674,6 +674,14 @@ body.sheet-open .fab,body.focus-open .fab,body.alarm-mode .fab{display:none}
 .sound-credits{margin-top:20px}
 .alarm-design .sound-credits .set-row{padding:12px 14px}
 .alarm-design .help a{color:var(--brand)}
+
+/* One button colour across the app: black buttons and selected options (white in Dark mode).
+   Orange-brown stays for links, ticks, switches and progress. Dark screens (study timer, ringing alarm) keep orange buttons. */
+.btn-primary,.btn-gold{background:var(--btn);color:var(--btn-ink)}
+.icon-btn.on,.day.on,.wdays button.on,.chip-btn.on,.dur-pick button.on{background:var(--btn);border-color:var(--btn);color:var(--btn-ink)}
+.theme-seg button.on,.lvl-seg button.on{background:var(--btn);color:var(--btn-ink);box-shadow:none}
+.presets button.on,.lock-opt.on,.mopt.on,.mcard.on,.cloud-opt:first-of-type{border-color:var(--btn)}
+.focus-screen .btn-primary,.overlay .btn-primary,.hero .btn-primary{background:var(--brand);color:#fff}
 /* Alarm editor, mission and sound sheets follow the app theme: light when Appearance is Light. */
 :root[data-theme="light"] .alarm-design{--bg:#F4EFE6;--surface:#FFFDF9;--surface-2:#F8F3EA;--surface-3:#EFE7DA;--ink:#1F1A16;--ink-2:#3B342D;--muted:#6F665C;--faint:#A1978A;--line:#E7DFD1;--accent:#1F1A16;--accent-ink:#fff;--accent-soft:#F8E4D9;color-scheme:light}
 :root[data-theme="light"] .alarm-design .sheet-foot{background:var(--bg)}
@@ -861,7 +869,7 @@ body.auth-open .app,body.auth-open #fab{display:none!important}
 .mchip.on{background:var(--ink);color:var(--bg)}
 .mcards{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .mcard{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;background:var(--surface);border:1.5px solid var(--line);border-radius:20px;padding:16px 10px 12px;cursor:pointer;min-width:0}
-.mcard.on{border-color:var(--accent)}
+.mcard.on{border-color:var(--btn)}
 .mc-ic{width:58px;height:58px;border-radius:50%;display:grid;place-items:center;font-size:27px;margin-bottom:6px}
 .mc-ic.sm{width:38px;height:38px;font-size:19px;margin:0}
 .mission-icon{display:inline-block;width:1em;height:1em;vertical-align:-.15em;flex:none;pointer-events:none;overflow:visible}
@@ -881,7 +889,7 @@ body.auth-open .app,body.auth-open #fab{display:none!important}
 .bigstep span{font:700 40px var(--sans);min-width:56px;text-align:center}
 .lvl-seg{display:flex;width:100%;background:var(--surface-2);border-radius:14px;padding:4px;gap:4px}
 .lvl-seg button{flex:1;border:none;background:transparent;color:var(--ink);border-radius:11px;padding:11px 6px;font:600 14px var(--sans)}
-.lvl-seg button.on{background:var(--brand);color:var(--brand-ink)}
+.lvl-seg button.on{background:var(--btn);color:var(--btn-ink)}
 .mp-pack{width:100%;display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--surface);border:1.5px solid var(--line);border-radius:14px;padding:13px 14px;font:600 14px var(--sans);color:var(--ink)}
 .mp-pack em{font-style:normal;color:var(--muted);font-weight:500;font-size:13px}
 .mp-note{font-size:12.5px;color:var(--muted);margin:0}

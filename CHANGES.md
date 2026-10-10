@@ -1,5 +1,7 @@
 ## Alarm screens follow the Light theme — 11 October 2026
 
+- One button colour everywhere: main buttons and selected options (Start session, Save Alarm, subject chips, durations, segmented tabs, weekdays, days in Plan, difficulty) are black in Light mode and white in Dark mode. Orange-brown stays for links, ticks, switches and progress; the dark study timer and ringing screens keep orange buttons so they stand out.
+
 - The New/Edit Alarm screen, mission picker, verse/affirmation/quiz packs, Wake-up Check, alarm sound pickers and sound credits now use the light colours when Appearance is Light (or System with a light phone), and stay black only in Dark mode. The ringing-alarm and mission screens stay black so they are easy to see when you wake up.
 
 ## Fairer Bible/affirmation voice check and greyed-out alarms — 11 October 2026
