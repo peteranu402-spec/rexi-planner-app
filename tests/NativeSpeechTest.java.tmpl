@@ -1,0 +1,71 @@
+import java.util.*;
+
+/** Exercises the unchanged production speech methods with simulated Android callbacks. */
+public class NativeSpeechTest {
+    @interface JavascriptInterface {}
+    static class Activity { void runOnUiThread(Runnable r) { r.run(); } }
+    static class Bundle extends HashMap<String, Object> {
+        @SuppressWarnings("unchecked") ArrayList<String> getStringArrayList(String key) { return (ArrayList<String>)get(key); }
+    }
+    interface RecognitionListener {
+        void onReadyForSpeech(Bundle p); void onBeginningOfSpeech(); void onRmsChanged(float f);
+        void onBufferReceived(byte[] b); void onEndOfSpeech(); void onPartialResults(Bundle p);
+        void onEvent(int type, Bundle p); void onError(int e); void onResults(Bundle b);
+    }
+    static class Intent {
+        Map<String,Object> extras=new HashMap<>(); Intent(String action) {}
+        void putExtra(String key,Object value) { extras.put(key,value); }
+    }
+    static class RecognizerIntent {
+        static final String ACTION_RECOGNIZE_SPEECH="recognize",EXTRA_LANGUAGE_MODEL="model",
+            LANGUAGE_MODEL_FREE_FORM="free",EXTRA_MAX_RESULTS="max",EXTRA_LANGUAGE="lang";
+    }
+    static class SpeechRecognizer {
+        static final String RESULTS_RECOGNITION="results";
+        static SpeechRecognizer latest;
+        RecognitionListener listener; Intent intent; boolean cancelled,destroyed;
+        static SpeechRecognizer createSpeechRecognizer(Activity a) { return latest=new SpeechRecognizer(); }
+        void setRecognitionListener(RecognitionListener l) { listener=l; }
+        void startListening(Intent i) { if(listener==null)throw new IllegalStateException();intent=i; }
+        void cancel() { cancelled=true; }
+        void destroy() { destroyed=true; }
+    }
+    static class Speaker {
+        static Speaker get(Activity a) { return new Speaker(); } void stop() {}
+    }
+    static class AlarmService {
+        static int paused,resumed;
+        static void pauseForSpeech() { paused++; }
+        static void resumeAfterSpeech() { resumed++; }
+    }
+    static class JSONObject {
+        static String quote(String v) { return "\""+v.replace("\\","\\\\").replace("\"","\\\"")+"\""; }
+    }
+    static class Bridge {
+        Activity activity=new Activity(); SpeechRecognizer recognizer; boolean enabled=true;
+        List<String> messages=new ArrayList<>(); boolean canListen() { return enabled; }
+        void sendToPage(String js) { messages.add(js); }
+        // PRODUCTION_SPEECH_METHODS
+    }
+    static void check(boolean ok,String reason) { if(!ok)throw new AssertionError(reason); }
+    static Bundle result(String text) { Bundle b=new Bundle();b.put(SpeechRecognizer.RESULTS_RECOGNITION,new ArrayList<>(List.of(text)));return b; }
+    public static void main(String[] args) {
+        Bridge b=new Bridge();b.listenMission("first");SpeechRecognizer first=b.recognizer;
+        check("en-US".equals(first.intent.extras.get("lang")),"English content uses English recognition");
+        b.listenMission("second");SpeechRecognizer second=b.recognizer;
+        check(first.destroyed&&first.cancelled,"replacement releases old microphone");
+        int resumed=AlarmService.resumed;first.listener.onResults(result("late"));first.listener.onError(7);
+        check(b.messages.isEmpty()&&AlarmService.resumed==resumed,"old callbacks cannot interrupt replacement");
+        second.listener.onResults(result("I can|learn"));
+        check(b.messages.size()==1&&b.messages.get(0).contains("I can learn\",\"second\""),"results carry their own token");
+        check(second.destroyed&&b.recognizer==null,"finished request releases microphone");
+        second.listener.onResults(result("duplicate"));check(b.messages.size()==1,"duplicate callbacks ignored");
+        b.listenMission("third");SpeechRecognizer third=b.recognizer;b.cancelListening();third.listener.onResults(result("abandoned"));
+        check(third.destroyed&&b.messages.size()==1,"back/cancel discards abandoned results");
+        b.listenMission("retry");b.recognizer.listener.onError(9);
+        check(b.messages.get(1).endsWith("(9,\"retry\")"),"retry error carries token");
+        b.enabled=false;b.listenMission("unavailable");check(b.messages.get(2).endsWith("(-1,\"unavailable\")"),"unavailable microphone reports correct request");
+        b.enabled=true;b.listen();b.recognizer.listener.onResults(result("legacy"));check(b.messages.get(3).endsWith("\"legacy\",null)"),"legacy bridge remains compatible");
+        System.out.println("Native speech request tokens, cancellation, retries and resource release passed (simulated Android callbacks).");
+    }
+}

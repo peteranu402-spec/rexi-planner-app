@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Rexi Rise</string>
+    <string name="blocker_name">Rexi Rise app blocker</string>
+    <string name="blocker_desc">During a Focus study session, sends you back to your study timer if you open an app you chose to block. It only checks the name of the app on screen. It never reads what\'s on your screen, and does nothing when you aren\'t studying.</string>
+</resources>

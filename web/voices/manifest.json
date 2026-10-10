@@ -1,0 +1,54 @@
+{
+  "voice": "Nichalia Schwartz \u2014 Bright and Friendly",
+  "clips": [
+    {
+      "event": "study_start",
+      "purpose": "Study starts",
+      "file": "study_start.mp3",
+      "source": "ElevenLabs_2026-10-09T00_51_29_Nichalia Schwartz - Bright and Friendly_pvc_sp100_s50_sb100_v4(1).mp3",
+      "duration_seconds": 6.113
+    },
+    {
+      "event": "break_suggested",
+      "purpose": "Break suggested",
+      "file": "break_suggested.mp3",
+      "source": "ElevenLabs_2026-10-09T00_53_46_Nichalia Schwartz - Bright and Friendly_pvc_sp100_s50_sb100_v4(1).mp3",
+      "duration_seconds": 7.706
+    },
+    {
+      "event": "break_start",
+      "purpose": "Break starts",
+      "file": "break_start.mp3",
+      "source": "ElevenLabs_2026-10-09T00_55_02_Nichalia Schwartz - Bright and Friendly_pvc_sp100_s50_sb100_v4(1).mp3",
+      "duration_seconds": 5.799
+    },
+    {
+      "event": "break_end",
+      "purpose": "Break ends",
+      "file": "break_end.mp3",
+      "source": "ElevenLabs_2026-10-09T01_04_58_Nichalia Schwartz - Bright and Friendly_pvc_sp100_s50_sb100_v4.mp3",
+      "duration_seconds": 6.191
+    },
+    {
+      "event": "goal_reached",
+      "purpose": "Study goal reached",
+      "file": "goal_reached.mp3",
+      "source": "ElevenLabs_2026-10-09T01_06_42_Nichalia Schwartz - Bright and Friendly_pvc_sp100_s50_sb100_v4.mp3",
+      "duration_seconds": 5.329
+    },
+    {
+      "event": "study_complete",
+      "purpose": "Study session completed",
+      "file": "study_complete.mp3",
+      "source": "ElevenLabs_2026-10-09T01_07_52_Nichalia Schwartz - Bright and Friendly_pvc_sp100_s50_sb100_v4.mp3",
+      "duration_seconds": 8.046
+    },
+    {
+      "event": "bible_nlt",
+      "purpose": "Bible mission: KJV accepted, read NLT",
+      "file": "bible_nlt.mp3",
+      "source": "ElevenLabs_2026-10-09T01_11_20_Nichalia Schwartz - Bright and Friendly_pvc_sp100_s50_sb100_v4.mp3",
+      "duration_seconds": 4.754
+    }
+  ]
+}

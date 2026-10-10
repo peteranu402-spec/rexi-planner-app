@@ -1,0 +1,368 @@
+{
+  "translation": "NKJV",
+  "checked_on": "2026-10-09",
+  "publisher": "Thomas Nelson",
+  "quotation_policy_url": "https://www.biblegateway.com/versions/New-King-James-Version-NKJV-Bible/",
+  "sources": [
+    {
+      "reference": "Jeremiah 29:11",
+      "source_url": "https://www.biblegateway.com/passage/?search=Jeremiah+29%3A11&version=NKJV",
+      "sha256": "1b71c29a23ab9beeb3b50435c9a389c0335c8fd8923abe1ed40eb6dfbc5d988d",
+      "verse_count": 1
+    },
+    {
+      "reference": "Romans 15:13",
+      "source_url": "https://www.biblegateway.com/passage/?search=Romans+15%3A13&version=NKJV",
+      "sha256": "b0922af37a880ef2dea554adecb0ac1c640e1ce60d079cf4696b7677c0d49c46",
+      "verse_count": 1
+    },
+    {
+      "reference": "Proverbs 23:18",
+      "source_url": "https://www.biblegateway.com/passage/?search=Proverbs+23%3A18&version=NKJV",
+      "sha256": "615b78e2f6c59418bbda213acb9e92ec783a809b1df4a9efdcd800544a7a1399",
+      "verse_count": 1
+    },
+    {
+      "reference": "Isaiah 40:31",
+      "source_url": "https://www.biblegateway.com/passage/?search=Isaiah+40%3A31&version=NKJV",
+      "sha256": "12093bf14af4bde9767285dad5ce5900fd7665872710d39759853109cb63035d",
+      "verse_count": 1
+    },
+    {
+      "reference": "Romans 5:5",
+      "source_url": "https://www.biblegateway.com/passage/?search=Romans+5%3A5&version=NKJV",
+      "sha256": "be8578972bf51478340da39d84e22168b11ffbcf777073576226c856b28e128d",
+      "verse_count": 1
+    },
+    {
+      "reference": "Hebrews 10:23",
+      "source_url": "https://www.biblegateway.com/passage/?search=Hebrews+10%3A23&version=NKJV",
+      "sha256": "bd0892c9135d432efdd0b1b54117350968bf485221eb5e366d72d74a31e3717e",
+      "verse_count": 1
+    },
+    {
+      "reference": "Psalm 23:1",
+      "source_url": "https://www.biblegateway.com/passage/?search=Psalm+23%3A1&version=NKJV",
+      "sha256": "0f3293cd2d566592a999a0b18b72106c8687ac7e673c606a675040541989f8fc",
+      "verse_count": 1
+    },
+    {
+      "reference": "Psalm 46:1",
+      "source_url": "https://www.biblegateway.com/passage/?search=Psalm+46%3A1&version=NKJV",
+      "sha256": "a8b1c86a53ce7c60a691d28ae917cb6d78a7c8957d6cc666d020aec673b7954a",
+      "verse_count": 1
+    },
+    {
+      "reference": "Psalm 27:1",
+      "source_url": "https://www.biblegateway.com/passage/?search=Psalm+27%3A1&version=NKJV",
+      "sha256": "cd367b06ea232357f884f040503a5ded2bd8b48bb5e6fcadd3c0fed6ffd89e77",
+      "verse_count": 1
+    },
+    {
+      "reference": "Psalm 119:105",
+      "source_url": "https://www.biblegateway.com/passage/?search=Psalm+119%3A105&version=NKJV",
+      "sha256": "74e4b5ad4dda7f9693f2b5c7653dd9733597d3999a3209954c50871fa570959b",
+      "verse_count": 1
+    },
+    {
+      "reference": "Psalm 121:1-2",
+      "source_url": "https://www.biblegateway.com/passage/?search=Psalm+121%3A1-2&version=NKJV",
+      "sha256": "f598b1cb688b17ed871c5a6928e22b9ba7b662eaafb3b7214682a5d4c55d0caf",
+      "verse_count": 2
+    },
+    {
+      "reference": "Psalm 34:8",
+      "source_url": "https://www.biblegateway.com/passage/?search=Psalm+34%3A8&version=NKJV",
+      "sha256": "b4e0144a7c567329c000231cc764d11647a12037fa2a75b10143d068d5b2d452",
+      "verse_count": 1
+    },
+    {
+      "reference": "Romans 8:28",
+      "source_url": "https://www.biblegateway.com/passage/?search=Romans+8%3A28&version=NKJV",
+      "sha256": "4b93aa13263af8568a5955312ba80fd5d0c9ca775d0fc1c59ec65e78ae50933a",
+      "verse_count": 1
+    },
+    {
+      "reference": "Romans 12:2",
+      "source_url": "https://www.biblegateway.com/passage/?search=Romans+12%3A2&version=NKJV",
+      "sha256": "569d5a1f537b89979d246271206528ed5b9e323f3673419ad7f731f1861dc6cc",
+      "verse_count": 1
+    },
+    {
+      "reference": "Romans 8:31",
+      "source_url": "https://www.biblegateway.com/passage/?search=Romans+8%3A31&version=NKJV",
+      "sha256": "c3659c91c55242475215596585115698bc1bbada9b7d18a7ea7fffb32685a298",
+      "verse_count": 1
+    },
+    {
+      "reference": "Romans 12:12",
+      "source_url": "https://www.biblegateway.com/passage/?search=Romans+12%3A12&version=NKJV",
+      "sha256": "d54aa4794ab72c19eac4ed0916ee3432b17836d106cf9a2e7414687a8e4c34f5",
+      "verse_count": 1
+    },
+    {
+      "reference": "Romans 8:37",
+      "source_url": "https://www.biblegateway.com/passage/?search=Romans+8%3A37&version=NKJV",
+      "sha256": "cdafddde1048c31caffde083011befdd2e3c2ddcdb9e781e7094e726f622c72e",
+      "verse_count": 1
+    },
+    {
+      "reference": "Romans 12:21",
+      "source_url": "https://www.biblegateway.com/passage/?search=Romans+12%3A21&version=NKJV",
+      "sha256": "24a79e826c69b9cedc71b4c4c9ccdae6e95306443734e0e6b554d3dc77ce104e",
+      "verse_count": 1
+    },
+    {
+      "reference": "Joshua 1:9",
+      "source_url": "https://www.biblegateway.com/passage/?search=Joshua+1%3A9&version=NKJV",
+      "sha256": "4073c4f5f33b07dd19dcedf7c4bc8c31e81f0ba71fe5ca41e16d2a8f20ad5be3",
+      "verse_count": 1
+    },
+    {
+      "reference": "Isaiah 41:10",
+      "source_url": "https://www.biblegateway.com/passage/?search=Isaiah+41%3A10&version=NKJV",
+      "sha256": "b30305b4289504434139a450cce355e34c8fd2c62400a35057264cc79f3ab3fc",
+      "verse_count": 1
+    },
+    {
+      "reference": "2 Timothy 1:7",
+      "source_url": "https://www.biblegateway.com/passage/?search=2+Timothy+1%3A7&version=NKJV",
+      "sha256": "823c0b715edb8b7985974aa2f87c62c34c07ae078c9430d679ccdf7a4298f56e",
+      "verse_count": 1
+    },
+    {
+      "reference": "Psalm 31:24",
+      "source_url": "https://www.biblegateway.com/passage/?search=Psalm+31%3A24&version=NKJV",
+      "sha256": "264db373b0be7b482adef5bf1454349b5703ba28198b5b1da132301dc1d34953",
+      "verse_count": 1
+    },
+    {
+      "reference": "Deuteronomy 31:6",
+      "source_url": "https://www.biblegateway.com/passage/?search=Deuteronomy+31%3A6&version=NKJV",
+      "sha256": "6610b395617ad3cda13a2ba1fb2f710267923f3e902c503e7619c571daafb757",
+      "verse_count": 1
+    },
+    {
+      "reference": "Psalm 56:3",
+      "source_url": "https://www.biblegateway.com/passage/?search=Psalm+56%3A3&version=NKJV",
+      "sha256": "c2cfa4c68c8e9e75a9c7d6d0f83fbefb958d134afdc1873dea07c0e97f95abbb",
+      "verse_count": 1
+    },
+    {
+      "reference": "John 14:27",
+      "source_url": "https://www.biblegateway.com/passage/?search=John+14%3A27&version=NKJV",
+      "sha256": "69ddba1d1ed20541211f2a45c56913e6589ebea79e39742b142cf4b61a66ce8e",
+      "verse_count": 1
+    },
+    {
+      "reference": "Isaiah 26:3",
+      "source_url": "https://www.biblegateway.com/passage/?search=Isaiah+26%3A3&version=NKJV",
+      "sha256": "726e92657b256952553f564fce0d3d32c25d1abd3bec87876fbde9650a36ebbd",
+      "verse_count": 1
+    },
+    {
+      "reference": "Matthew 11:28",
+      "source_url": "https://www.biblegateway.com/passage/?search=Matthew+11%3A28&version=NKJV",
+      "sha256": "792fa742ac1b08e013d67927dc25a24b138d1df09e827ea44089f1d544d97408",
+      "verse_count": 1
+    },
+    {
+      "reference": "Philippians 4:6",
+      "source_url": "https://www.biblegateway.com/passage/?search=Philippians+4%3A6&version=NKJV",
+      "sha256": "63415f9db601ab04009c775410263a5b8a91256b496a87acec4fa449de436b6a",
+      "verse_count": 1
+    },
+    {
+      "reference": "Philippians 4:7",
+      "source_url": "https://www.biblegateway.com/passage/?search=Philippians+4%3A7&version=NKJV",
+      "sha256": "cf9797666c1430c35101e8f177aa495d0b4aab867cfd35518339a8fd60e025b6",
+      "verse_count": 1
+    },
+    {
+      "reference": "John 16:33",
+      "source_url": "https://www.biblegateway.com/passage/?search=John+16%3A33&version=NKJV",
+      "sha256": "b97de397ea05e8ba7c2fd25bd86f2dfd9243aa3d0e5563b1e6d602013fbe49c8",
+      "verse_count": 1
+    },
+    {
+      "reference": "Proverbs 3:5",
+      "source_url": "https://www.biblegateway.com/passage/?search=Proverbs+3%3A5&version=NKJV",
+      "sha256": "b71f93fb2d2f6bea29abd83e04f01ebed6ab7e70351a67148ad2af5f26010068",
+      "verse_count": 1
+    },
+    {
+      "reference": "Proverbs 3:6",
+      "source_url": "https://www.biblegateway.com/passage/?search=Proverbs+3%3A6&version=NKJV",
+      "sha256": "21def3676643d5e59b06aed1e050a4343a890b369bcfc50f1eadcde6217d5466",
+      "verse_count": 1
+    },
+    {
+      "reference": "James 1:5",
+      "source_url": "https://www.biblegateway.com/passage/?search=James+1%3A5&version=NKJV",
+      "sha256": "ffdbaceec9b15a552914f85b1422e8582851b49b18d947dff8aa764122823b7a",
+      "verse_count": 1
+    },
+    {
+      "reference": "Proverbs 4:7",
+      "source_url": "https://www.biblegateway.com/passage/?search=Proverbs+4%3A7&version=NKJV",
+      "sha256": "ad88ff86e7d36ed8bcb5e49f2fdf40f287267691b1fb7a43eb12bf7bc07398fa",
+      "verse_count": 1
+    },
+    {
+      "reference": "Proverbs 16:3",
+      "source_url": "https://www.biblegateway.com/passage/?search=Proverbs+16%3A3&version=NKJV",
+      "sha256": "ffaa9512f0c20078e84b9791150ff0cd8babba2f0f52212452cb22f8cadc5606",
+      "verse_count": 1
+    },
+    {
+      "reference": "Proverbs 2:6",
+      "source_url": "https://www.biblegateway.com/passage/?search=Proverbs+2%3A6&version=NKJV",
+      "sha256": "a0430112f7bae15f1f4b2cce262f4c9db385a0f1a5466db8a2d70ce750342f69",
+      "verse_count": 1
+    },
+    {
+      "reference": "1 Thessalonians 5:18",
+      "source_url": "https://www.biblegateway.com/passage/?search=1+Thessalonians+5%3A18&version=NKJV",
+      "sha256": "359e8c490861ccbaf161e9d96207340817a5cc837728efc0b0fe4df84b79a5f9",
+      "verse_count": 1
+    },
+    {
+      "reference": "Psalm 107:1",
+      "source_url": "https://www.biblegateway.com/passage/?search=Psalm+107%3A1&version=NKJV",
+      "sha256": "6ca8aa738f4e25095883769a26fb585d05a62faf47759d001c039059f3ba19e5",
+      "verse_count": 1
+    },
+    {
+      "reference": "Psalm 100:4",
+      "source_url": "https://www.biblegateway.com/passage/?search=Psalm+100%3A4&version=NKJV",
+      "sha256": "05f75931c374e40df67c824488b84fc66b7e0f1f37ecd1d83ede5fe8e26ed949",
+      "verse_count": 1
+    },
+    {
+      "reference": "Psalm 118:24",
+      "source_url": "https://www.biblegateway.com/passage/?search=Psalm+118%3A24&version=NKJV",
+      "sha256": "9b6f9f7e4e6e895928351e0cdc03119785303d2fce9e89612aa238f4c2f114ba",
+      "verse_count": 1
+    },
+    {
+      "reference": "Colossians 3:15",
+      "source_url": "https://www.biblegateway.com/passage/?search=Colossians+3%3A15&version=NKJV",
+      "sha256": "07f07c8cd42485e0f81b5b3cd3a002699aa06cf25db9011c2f083890e9abefe1",
+      "verse_count": 1
+    },
+    {
+      "reference": "Psalm 136:1",
+      "source_url": "https://www.biblegateway.com/passage/?search=Psalm+136%3A1&version=NKJV",
+      "sha256": "5d5e44f211a8214be60b15bc9c845d93cb307f8ac1ec9c4fafd00ec829ce76b5",
+      "verse_count": 1
+    },
+    {
+      "reference": "Hebrews 11:1",
+      "source_url": "https://www.biblegateway.com/passage/?search=Hebrews+11%3A1&version=NKJV",
+      "sha256": "f3180192e93b8e9f0ea7721e34faa88fed8e7a01f4ab3a3c729eef0d2b6e7084",
+      "verse_count": 1
+    },
+    {
+      "reference": "John 3:16",
+      "source_url": "https://www.biblegateway.com/passage/?search=John+3%3A16&version=NKJV",
+      "sha256": "da4c42b3a2287d7bd61f7eec49655108f9f050b7577d7a27efb8dea862fc0313",
+      "verse_count": 1
+    },
+    {
+      "reference": "Mark 9:23",
+      "source_url": "https://www.biblegateway.com/passage/?search=Mark+9%3A23&version=NKJV",
+      "sha256": "d6c49cea3fcb5b65c19bc4bb53269bf1cc5201d02c6588ebf2b36577ba6119a8",
+      "verse_count": 1
+    },
+    {
+      "reference": "2 Corinthians 5:7",
+      "source_url": "https://www.biblegateway.com/passage/?search=2+Corinthians+5%3A7&version=NKJV",
+      "sha256": "e1b63c03141519132762c9bbc6753792ab5ef32355860c0b7a3ae9fcb54b9d16",
+      "verse_count": 1
+    },
+    {
+      "reference": "Hebrews 11:6",
+      "source_url": "https://www.biblegateway.com/passage/?search=Hebrews+11%3A6&version=NKJV",
+      "sha256": "a009428c5d19a6d665d60186d9a4a69ffa4d1b3a3877213184c26395b983ea45",
+      "verse_count": 1
+    },
+    {
+      "reference": "Romans 10:17",
+      "source_url": "https://www.biblegateway.com/passage/?search=Romans+10%3A17&version=NKJV",
+      "sha256": "69d229c36e35f11f5ed5c5db096687adbb3a36646c79c03bdcd7a0f95a30aa15",
+      "verse_count": 1
+    },
+    {
+      "reference": "Philippians 4:13",
+      "source_url": "https://www.biblegateway.com/passage/?search=Philippians+4%3A13&version=NKJV",
+      "sha256": "122d5e26e306589315f7c1eada0bebf1e18fcf7aa8308d868170c6e9dcdd5449",
+      "verse_count": 1
+    },
+    {
+      "reference": "Isaiah 40:29",
+      "source_url": "https://www.biblegateway.com/passage/?search=Isaiah+40%3A29&version=NKJV",
+      "sha256": "ecf095456735f712da658310dd61ab755befd8be0281eecbcd0c0bc71df65c0c",
+      "verse_count": 1
+    },
+    {
+      "reference": "Nehemiah 8:10",
+      "source_url": "https://www.biblegateway.com/passage/?search=Nehemiah+8%3A10&version=NKJV",
+      "sha256": "eb58c4b2fc4625244756c01f6f4ae99deba020abf2c0c8c7ce3bbcdfad41aa8f",
+      "verse_count": 1
+    },
+    {
+      "reference": "Colossians 3:23",
+      "source_url": "https://www.biblegateway.com/passage/?search=Colossians+3%3A23&version=NKJV",
+      "sha256": "bb47aeb6f2a0557ed078160936ad0b690638eb421ef5c30799bfc06244266f51",
+      "verse_count": 1
+    },
+    {
+      "reference": "Proverbs 6:6",
+      "source_url": "https://www.biblegateway.com/passage/?search=Proverbs+6%3A6&version=NKJV",
+      "sha256": "e89e48cda4656995064d33320147cc56af986772ffc456141b7a724b8090586e",
+      "verse_count": 1
+    },
+    {
+      "reference": "Psalm 18:2",
+      "source_url": "https://www.biblegateway.com/passage/?search=Psalm+18%3A2&version=NKJV",
+      "sha256": "1ae03a36aae912b9a4d899ab4593f2cf2e4ebe4d5245397f716bbb809886da31",
+      "verse_count": 1
+    },
+    {
+      "reference": "Lamentations 3:23",
+      "source_url": "https://www.biblegateway.com/passage/?search=Lamentations+3%3A23&version=NKJV",
+      "sha256": "5ff3641e27a14adb14364ab7f0bfb2b6aa5a349ed82c491fe0fa9fa6ab2f3b41",
+      "verse_count": 1
+    },
+    {
+      "reference": "Psalm 5:3",
+      "source_url": "https://www.biblegateway.com/passage/?search=Psalm+5%3A3&version=NKJV",
+      "sha256": "490d7494f66c3b05a515f16291cf806cbc9e934e63616ed810eb9723ee1c4669",
+      "verse_count": 1
+    },
+    {
+      "reference": "Psalm 30:5",
+      "source_url": "https://www.biblegateway.com/passage/?search=Psalm+30%3A5&version=NKJV",
+      "sha256": "de319665ec62781291d7996ff53afa4699150fb08df7fec61728182986016c5d",
+      "verse_count": 1
+    },
+    {
+      "reference": "Ephesians 5:14",
+      "source_url": "https://www.biblegateway.com/passage/?search=Ephesians+5%3A14&version=NKJV",
+      "sha256": "04bf14586934156476d9ad3b6e9de107e916d3a44d9f48921bad66f6cd5b03fb",
+      "verse_count": 1
+    },
+    {
+      "reference": "Psalm 143:8",
+      "source_url": "https://www.biblegateway.com/passage/?search=Psalm+143%3A8&version=NKJV",
+      "sha256": "634b8874445c5d650e8e2b56ca750adaeff51adcfc82e6c5f13d5def004721cf",
+      "verse_count": 1
+    },
+    {
+      "reference": "Psalm 90:14",
+      "source_url": "https://www.biblegateway.com/passage/?search=Psalm+90%3A14&version=NKJV",
+      "sha256": "78e60ee3ae8c0dae59c5c829324a95736a4b8bf2f5b6963907e795faa095dd15",
+      "verse_count": 1
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+package com.rexi.planner;
+import java.util.*;
+
+/** Uses production focus methods with simulated Android services, not a physical phone. */
+public class BreakExpiryTest {
+    static class android {
+        static class os { static class PowerManager { boolean awake=true; boolean isInteractive(){return awake;} } }
+        static class app { static class KeyguardManager { boolean locked; boolean isKeyguardLocked(){return locked;} } }
+        static class media { static class AudioManager { static final int MODE_NORMAL=0;int mode;int getMode(){return mode;} } }
+    }
+    static class Context {
+        android.os.PowerManager power=new android.os.PowerManager();
+        android.app.KeyguardManager keyguard=new android.app.KeyguardManager();
+        android.media.AudioManager audio=new android.media.AudioManager();
+        NotificationManager notifications=new NotificationManager();
+        List<Intent> launches=new ArrayList<>();
+        <T>T getSystemService(Class<T> type){return type.cast(type==android.os.PowerManager.class?power:type==android.app.KeyguardManager.class?keyguard:type==android.media.AudioManager.class?audio:notifications);}
+        void startActivity(Intent i){launches.add(i);}
+    }
+    static class Intent {
+        static final int FLAG_ACTIVITY_NEW_TASK=1,FLAG_ACTIVITY_REORDER_TO_FRONT=2,FLAG_ACTIVITY_SINGLE_TOP=4;
+        Map<String,Object> extras=new HashMap<>();Intent(Context c,Class<?> type){}
+        void putExtra(String key,boolean value){extras.put(key,value);}void addFlags(int flags){}
+    }
+    static class MainActivity {static boolean foreground;}
+    static class NotificationManager {void cancel(int id){}}
+    static class JSONException extends RuntimeException {}
+    static class JSONArray extends ArrayList<String> {String optString(int i){return get(i);}int length(){return size();}}
+    static class JSONObject {
+        Map<String,Object> values=new HashMap<>();JSONObject put(String k,Object v){values.put(k,v);return this;}
+        String optString(String k){return optString(k,"");}String optString(String k,String d){return values.containsKey(k)?String.valueOf(values.get(k)):d;}
+        long optLong(String k,long d){Object v=values.get(k);return v instanceof Number?((Number)v).longValue():d;}
+        int optInt(String k,int d){return (int)optLong(k,d);}boolean optBoolean(String k,boolean d){Object v=values.get(k);return v instanceof Boolean?(Boolean)v:d;}
+        JSONArray optJSONArray(String k){return (JSONArray)values.get(k);}
+    }
+    static class Speaker {static int played;static Speaker get(Context c){return new Speaker();}void play(String id,String text){played++;}void say(String text){}}
+    static class FocusDnd {static void apply(Context c,JSONObject o){}}
+    static class FocusService {static int refreshed;static void refresh(Context c){refreshed++;}}
+    static class Engine {
+        static JSONObject stored;static int alerts,schedules;static final int ALERT_ID=1;
+        static JSONObject state(Context c){return stored;}static void saveState(Context c,JSONObject o){stored=o;}
+        static void schedule(Context c,JSONObject o){schedules++;}
+        static String nm(JSONObject o){return "";}static String goalWords(int min){return Integer.toString(min);}
+        static void alert(Context c,String title,String text,boolean full,Object... extra){alerts++;}
+        static Object deleteNudge(Context c){return null;}static void comeBack(Context c,String subject,String quote){}
+        static Set<String> strictAlwaysAllowed(Context c){return Set.of("rexi");}
+        static Set<String> neverBlock(Context c){return Set.of("rexi");}static String currentKeyboard(Context c){return "keyboard";}
+        // PRODUCTION_FOCUS_METHODS
+    }
+    static void check(boolean value,String reason){if(!value)throw new AssertionError(reason);}
+    static JSONObject breaking(long end){return new JSONObject().put("state","break").put("lock","pin").put("breakEndAt",end).put("updatedAt",end-300000).put("studiedMs",3000000).put("sessionMs",3000000).put("studyMin",50).put("voice",false).put("breaksRemaining",1);}
+    public static void main(String[] args){
+        Context c=new Context();long now=System.currentTimeMillis();Engine.stored=breaking(now+60000);
+        Engine.checkBreakDeadline(c);check("break".equals(Engine.stored.optString("state")),"active break remains unlocked");check(!Engine.shouldBlock(c,"launcher"),"Home allowed during break");
+        Engine.stored=breaking(now-1000);Engine.checkBreakDeadline(c);
+        check("study".equals(Engine.stored.optString("state")),"deadline transitions native state to study");
+        check(Engine.stored.optBoolean("returnToStudy",false),"return remains pending until page acknowledgement");
+        check(c.launches.size()==1&&Boolean.TRUE.equals(c.launches.get(0).extras.get("returnToStudy")),"expiry launches study page without notification tap");
+        check(Engine.shouldBlock(c,"launcher"),"Home blocked again after expiry");
+        check(Engine.stored.optLong("sessionMs",0)==3300000,"break included in session time");
+        check(Engine.stored.optLong("studiedMs",0)==3000000,"break not credited as studying");
+        Engine.checkBreakDeadline(c);check(c.launches.size()==1,"duplicate deadline check does not launch twice");
+        Engine.stored=breaking(System.currentTimeMillis()-1000);c.power.awake=false;int launches=c.launches.size();Engine.checkBreakDeadline(c);
+        check(Engine.shouldBlock(c,"launcher")&&Engine.stored.optBoolean("returnToStudy",false),"lock resumes while display sleeps");check(c.launches.size()==launches,"screen stays off");
+        c.power.awake=true;c.keyguard.locked=true;Engine.returnToStudy(c);check(c.launches.size()==launches,"waits for unlock");
+        c.keyguard.locked=false;Engine.returnToStudy(c);check(c.launches.size()==launches+1,"returns to study after unlock");
+        MainActivity.foreground=true;Engine.returnToStudy(c);check(c.launches.size()==launches+1,"no repeated launch when already visible");Engine.backInApp(c);check(!Engine.stored.optBoolean("returnToStudy",true),"page acknowledgement clears pending return");MainActivity.foreground=false;
+        Engine.stored=breaking(System.currentTimeMillis()-1000);c.audio.mode=1;launches=c.launches.size();Engine.checkBreakDeadline(c);check(c.launches.size()==launches&&Engine.stored.optBoolean("returnToStudy",false),"call defers page return while preserving lock request");c.audio.mode=0;Engine.returnToStudy(c);check(c.launches.size()==launches+1,"returns when call finishes");
+        System.out.println("Native break deadline, automatic Home lock, pending return, sleep/unlock and call deferral passed (simulated Android services).");
+    }
+}

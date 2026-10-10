@@ -1,0 +1,31 @@
+{
+  "name": "Rexi Rise",
+  "short_name": "Rexi Rise",
+  "description": "Wake up. Focus. Rise. Mission alarms, a focus study timer and your semester planner.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F4EFE6",
+  "theme_color": "#F4EFE6",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
