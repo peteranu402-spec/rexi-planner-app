@@ -674,6 +674,58 @@ body.sheet-open .fab,body.focus-open .fab,body.alarm-mode .fab{display:none}
 .sound-credits{margin-top:20px}
 .alarm-design .sound-credits .set-row{padding:12px 14px}
 .alarm-design .help a{color:var(--brand)}
+/* Alarm editor, mission and sound sheets follow the app theme: light when Appearance is Light. */
+:root[data-theme="light"] .alarm-design{--bg:#F4EFE6;--surface:#FFFDF9;--surface-2:#F8F3EA;--surface-3:#EFE7DA;--ink:#1F1A16;--ink-2:#3B342D;--muted:#6F665C;--faint:#A1978A;--line:#E7DFD1;--accent:#1F1A16;--accent-ink:#fff;--accent-soft:#F8E4D9;color-scheme:light}
+:root[data-theme="light"] .alarm-design .sheet-foot{background:var(--bg)}
+:root[data-theme="light"] .alarm-design .sheet-foot>.btn-block{background:var(--ink);color:#fff}
+:root[data-theme="light"] .alarm-design .card{background:var(--surface);border:1px solid var(--line);box-shadow:0 1px 2px rgba(40,28,16,.04)}
+:root[data-theme="light"] .alarm-design .sh-label{color:var(--muted)}
+:root[data-theme="light"] .sheet-close{border-color:var(--line);background:var(--surface);color:var(--muted)}
+:root[data-theme="light"] .alarm-editor .theme-seg.wide{background:var(--surface-3)}
+:root[data-theme="light"] .alarm-editor .theme-seg.wide button{color:var(--muted)}
+:root[data-theme="light"] .alarm-editor .theme-seg.wide button.on{background:var(--ink);color:#fff}
+:root[data-theme="light"] .alarm-editor .ed-name,:root[data-theme="light"] .alarm-editor .ed-name::placeholder{color:var(--ink)}
+:root[data-theme="light"] .alarm-editor .wh-it,:root[data-theme="light"] .alarm-editor .wh-col[data-w="ap"] .wh-it{color:var(--faint)}
+:root[data-theme="light"] .alarm-editor .wh-it.on,:root[data-theme="light"] .alarm-editor .wh-col[data-w="ap"] .wh-it.on{color:var(--ink)}
+:root[data-theme="light"] .alarm-editor .wh-sep{color:var(--muted)}
+:root[data-theme="light"] .wh-slot::after{border-color:var(--faint)}
+:root[data-theme="light"] .alarm-editor .wdays button{border-color:var(--line);color:var(--ink)}
+:root[data-theme="light"] .alarm-editor .wdays button.on{background:var(--ink);border-color:var(--ink);color:#fff}
+:root[data-theme="light"] .alarm-editor .switch{background:var(--surface-3)}
+:root[data-theme="light"] .ed-mission-add{border-color:var(--line);color:var(--muted)}
+:root[data-theme="light"] .sound-category{background:var(--surface);border:1px solid var(--line);color:var(--ink)}
+:root[data-theme="light"] .sound-select{border-color:var(--faint);color:#fff}
+:root[data-theme="light"] .sound-add,:root[data-theme="light"] .sound-credit-link{color:var(--muted)}
+:root[data-theme="light"] .sound-category .chev,:root[data-theme="light"] .sound-count{color:var(--faint)}
+:root[data-theme="light"] .sound-track .snd-pick{color:var(--ink)}
+:root[data-theme="light"] .sound-track .snd-play{background:var(--surface-3);color:var(--muted)}
+@media (prefers-color-scheme: light){
+:root:not([data-theme]) .alarm-design{--bg:#F4EFE6;--surface:#FFFDF9;--surface-2:#F8F3EA;--surface-3:#EFE7DA;--ink:#1F1A16;--ink-2:#3B342D;--muted:#6F665C;--faint:#A1978A;--line:#E7DFD1;--accent:#1F1A16;--accent-ink:#fff;--accent-soft:#F8E4D9;color-scheme:light}
+:root:not([data-theme]) .alarm-design .sheet-foot{background:var(--bg)}
+:root:not([data-theme]) .alarm-design .sheet-foot>.btn-block{background:var(--ink);color:#fff}
+:root:not([data-theme]) .alarm-design .card{background:var(--surface);border:1px solid var(--line);box-shadow:0 1px 2px rgba(40,28,16,.04)}
+:root:not([data-theme]) .alarm-design .sh-label{color:var(--muted)}
+:root:not([data-theme]) .sheet-close{border-color:var(--line);background:var(--surface);color:var(--muted)}
+:root:not([data-theme]) .alarm-editor .theme-seg.wide{background:var(--surface-3)}
+:root:not([data-theme]) .alarm-editor .theme-seg.wide button{color:var(--muted)}
+:root:not([data-theme]) .alarm-editor .theme-seg.wide button.on{background:var(--ink);color:#fff}
+:root:not([data-theme]) .alarm-editor .ed-name,:root:not([data-theme]) .alarm-editor .ed-name::placeholder{color:var(--ink)}
+:root:not([data-theme]) .alarm-editor .wh-it,:root:not([data-theme]) .alarm-editor .wh-col[data-w="ap"] .wh-it{color:var(--faint)}
+:root:not([data-theme]) .alarm-editor .wh-it.on,:root:not([data-theme]) .alarm-editor .wh-col[data-w="ap"] .wh-it.on{color:var(--ink)}
+:root:not([data-theme]) .alarm-editor .wh-sep{color:var(--muted)}
+:root:not([data-theme]) .wh-slot::after{border-color:var(--faint)}
+:root:not([data-theme]) .alarm-editor .wdays button{border-color:var(--line);color:var(--ink)}
+:root:not([data-theme]) .alarm-editor .wdays button.on{background:var(--ink);border-color:var(--ink);color:#fff}
+:root:not([data-theme]) .alarm-editor .switch{background:var(--surface-3)}
+:root:not([data-theme]) .ed-mission-add{border-color:var(--line);color:var(--muted)}
+:root:not([data-theme]) .sound-category{background:var(--surface);border:1px solid var(--line);color:var(--ink)}
+:root:not([data-theme]) .sound-select{border-color:var(--faint);color:#fff}
+:root:not([data-theme]) .sound-add,:root:not([data-theme]) .sound-credit-link{color:var(--muted)}
+:root:not([data-theme]) .sound-category .chev,:root:not([data-theme]) .sound-count{color:var(--faint)}
+:root:not([data-theme]) .sound-track .snd-pick{color:var(--ink)}
+:root:not([data-theme]) .sound-track .snd-play{background:var(--surface-3);color:var(--muted)}
+}
+
 @media(min-width:700px){.alarm-design{height:92vh;max-height:92vh;border-radius:24px}.alarm-design .sheet-head{padding-top:20px}}
 @media print{nav.tabs,.top .icon-btn,.no-print{display:none!important}body{background:#fff}}
 @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}

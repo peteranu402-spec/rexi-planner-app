@@ -1,3 +1,7 @@
+## Alarm screens follow the Light theme — 11 October 2026
+
+- The New/Edit Alarm screen, mission picker, verse/affirmation/quiz packs, Wake-up Check, alarm sound pickers and sound credits now use the light colours when Appearance is Light (or System with a light phone), and stay black only in Dark mode. The ringing-alarm and mission screens stay black so they are easy to see when you wake up.
+
 ## Fairer Bible/affirmation voice check and greyed-out alarms — 11 October 2026
 
 - **Percentage check:** a Bible verse passes when about 75% of its words are heard in order (affirmations 80%). Extra words ("um", the reference, repeats) no longer count against you.
