@@ -3,6 +3,8 @@ plugins {
 }
 
 def runNumber = (System.getenv('GITHUB_RUN_NUMBER') ?: '1').toInteger()
+// The repo was re-created, so GitHub's run counter restarted. Offset it so new APKs always install over older ones.
+def versionBase = 1000
 
 android {
     namespace 'com.rexi.planner'
@@ -12,8 +14,8 @@ android {
         applicationId 'com.rexi.planner'
         minSdk 26
         targetSdk 34
-        versionCode runNumber
-        versionName "1.0." + runNumber
+        versionCode versionBase + runNumber
+        versionName "1.1." + runNumber
     }
 
     signingConfigs {
