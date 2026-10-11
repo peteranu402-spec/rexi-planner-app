@@ -120,6 +120,7 @@ nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:6;display:flex;justify-c
 .pad{padding:18px}
 .h-sec{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:0 2px 10px}
 .al-head{position:relative;align-items:center}
+.field-plain[data-f="title"]{text-overflow:ellipsis}
 .setup-bar{height:6px;border-radius:6px;background:var(--line);overflow:hidden;margin:0 0 14px}.setup-bar i{display:block;height:100%;background:var(--brand);border-radius:6px}
 .setup-list .set-row{gap:12px;justify-content:flex-start}
 .setup-list .set-row .k{flex:1;min-width:0;text-align:left}
@@ -303,7 +304,7 @@ nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:6;display:flex;justify-c
 .confetti{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:1}
 .confetti i{position:absolute;top:-20px;width:9px;height:14px;border-radius:2px;animation:fall linear forwards}
 @keyframes fall{to{transform:translateY(110vh) rotate(720deg);opacity:.2}}
-.toast{position:fixed;left:50%;bottom:calc(92px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:60;background:var(--ink);color:var(--bg);padding:11px 18px;border-radius:99px;font:600 13.5px var(--sans);box-shadow:var(--shadow);animation:fade .2s ease;max-width:calc(100% - 32px);text-align:center}
+.toast{position:fixed;left:50%;bottom:calc(92px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:60;background:var(--ink);color:var(--bg);padding:11px 18px;border-radius:18px;font:600 13.5px/1.35 var(--sans);box-shadow:var(--shadow);animation:fade .2s ease;width:max-content;max-width:calc(100vw - 32px);text-align:center}
 /* alarms tab */
 .btn-sm{padding:8px 14px;font-size:13px;border-radius:11px}
 .perm{border-color:color-mix(in srgb,var(--hard) 40%,var(--line))}
@@ -567,8 +568,8 @@ body.focus-open{overflow:hidden}
 .chart .col.today .d{color:var(--accent)}
 .goal-line{position:absolute;left:0;right:0;border-top:2px dashed color-mix(in srgb,var(--good) 55%,transparent);z-index:0}
 .by-course{display:flex;flex-direction:column;gap:12px}
-.bc-row{display:grid;grid-template-columns:minmax(0,1fr) 2fr auto;gap:10px;align-items:center;font-size:13.5px}
-.bc-n{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bc-row{display:grid;grid-template-columns:minmax(0,1.3fr) 1.6fr auto;gap:10px;align-items:center;font-size:13.5px}
+.bc-n{font-weight:600;line-height:1.25;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow-wrap:anywhere}
 .bc-bar{height:10px;border-radius:99px;background:var(--surface-3);overflow:hidden}
 .bc-bar i{display:block;height:100%;border-radius:99px;background:var(--accent)}
 .bc-bar i.d-hard{background:var(--hard)}.bc-bar i.d-semi{background:var(--semi)}.bc-bar i.d-easy{background:var(--easy)}
@@ -1473,7 +1474,7 @@ function vProgress(){
 }
 
 function vGuide(){
-  let h='<div><div class="h-sec"><h2>Focus Mode</h2></div><div class="card list"><div><span class="num">1</span><p>Tap <b>Start studying</b>, pick a subject and how long.</p></div><div><span class="num">2</span><p>Breaks are suggested automatically (change the rhythm in <b>Settings → Focus Mode</b>), or tap <b>Break</b> any time.</p></div><div><span class="num">3</span><p>Reach your goal and your streak is marked for you. Keep going for bonus time.</p></div><div><span class="num">4</span><p><b>Strict lock</b> (in the app): during a session only Rexi Rise, calls and up to 5 apps you allow will open. To stop early, type the exit sentence.</p></div></div></div>';
+  let h='<div><div class="h-sec"><h2>Focus Mode</h2></div><div class="card list"><div><span class="num">1</span><p>Tap <b>Start studying</b>, pick a subject and how long.</p></div><div><span class="num">2</span><p>Your break time comes out of the session: 3 h on 50 / 10 gives 30 min of breaks to take in 5, 10 or 15-min pieces (change the rhythm in <b>Settings → Focus Mode</b>). Coming back early saves the rest. When a break ends you’re brought back to the study page.</p></div><div><span class="num">3</span><p>Reach a session goal and today is added to your streak automatically. Missing a day never resets it, and 7, 14, 30 and 60 days unlock a recap of your studying.</p></div><div><span class="num">4</span><p><b>Strict lock</b> (in the app): during study time only Rexi Rise, calls and up to 5 apps you allow will open, and other notifications are silenced. To stop early, type the exit sentence and give a real reason.</p></div></div></div>';
   h+='<div><div class="h-sec"><h2>Levels &amp; rewards</h2></div><div class="card list">'+LEVELS.map(L=>'<div><span class="num">'+L.at+'</span><div><b>'+L.name+'</b><p class="muted">'+L.d+' · Reward: '+L.reward.toLowerCase()+'</p></div></div>').join('')+'</div></div>';
   h+='<div><div class="h-sec"><h2>Missions</h2></div><div class="card list">'+MISSION_ORDER.map(k=>'<div><span class="num" style="font-size:18px;width:26px">'+MISSIONS[k].icon+'</span><div><b>'+MISSIONS[k].name+'</b><p class="muted">'+MISSIONS[k].desc+'</p></div></div>').join('')+'</div></div>';
   h+='<div><div class="h-sec"><h2>Making sure alarms ring</h2></div><div class="card list">'+(IS_APP?
@@ -2364,7 +2365,7 @@ function setSheet(){
     let c=(IS_APP?'<div class="sh-label">General</div><div class="card">'+'<div class="set-row srow" style="border-top:none"><span class="s-ic">'+svg('vibrate',19)+'</span><div class="k">Vibration</div><button class="switch'+(p.vibrate!==false?' on':'')+'" data-action="apToggle" data-f="vibrate" role="switch" aria-checked="'+(p.vibrate!==false)+'" aria-label="Vibration"></button></div>'+'</div>':'')
      +'<p class="help">The alarm keeps ringing until you finish the mission. For speaking missions (affirmation, Bible verse) it goes quiet so the microphone can hear you. If you stop or leave, it rings again about a minute later.</p>'
      +(IS_APP?'<div class="sh-label" style="margin-top:18px">Volume</div><p class="help" style="margin:0 2px 8px">Rexi Rise never rings below 60% of your phone’s maximum alarm volume.</p><div class="card"><div class="set-col"><div class="s-line"><span class="s-ic">'+svg('volume',19)+'</span><div class="k">Alarm volume</div><span class="muted" id="volTxt">'+(p.volume||100)+'%</span></div><input type="range" class="vol" min="60" max="100" step="5" value="'+(p.volume||100)+'" data-bind="vol" aria-label="Alarm volume"></div></div>':'<div class="card" style="margin-top:14px">'+sRow('volume','Alarm sound in the browser',S.sound?'On':'Off','toggleSound')+'</div>')
-     +(IS_APP?'<button class="btn btn-ghost btn-block" style="margin-top:16px" data-action="testAlarm">▶️ Test a real alarm in 10 seconds</button>':'');
+     +(IS_APP?'<button class="btn btn-ghost btn-block" style="margin-top:16px" data-action="testAlarm">'+svg('play',15)+' Test a real alarm in 10 seconds</button>':'');
     return {title:'Alarm settings',content:c,foot:''};
   }
   if(k==='alarmhelp'){
@@ -2402,7 +2403,7 @@ function setSheet(){
       c+='<div class="sh-label" style="margin-top:18px">Your phone</div><div class="card help-card"><span class="s-ic">'+svg('vibrate',19)+'</span><div><p style="color:var(--ink);font-weight:700;margin-bottom:6px">'+tip[0]+'</p><p>'+tip[1]+'</p>'+(key&&key!=='samsung'?'<button class="btn btn-ghost btn-sm" style="margin-top:6px" data-action="fixPerm" data-w="autostart">Open the setting</button>':'')+'</div></div>';
     }
     c+='<div class="sh-label" style="margin-top:18px">How the alarm works</div><div class="card help-card"><span class="s-ic">'+svg('info',19)+'</span><div><p>The alarm keeps ringing until you finish your mission. Speaking missions go quiet so the mic can hear you — if you leave before finishing, it rings again about a minute later.</p>'+(IS_APP?'<p>Swiping the notification away only hides it — the alarm keeps going.</p>':'')+'<p>To fully stop it, finish your mission (or snooze, if snooze is on).</p></div></div>';
-    c+='<button class="btn btn-ghost btn-block" style="margin-top:14px" data-action="testAlarm">▶️ '+(IS_APP?'Test a real alarm in 10 seconds':'Test the alarm')+'</button>';
+    c+='<button class="btn btn-ghost btn-block" style="margin-top:14px" data-action="testAlarm">'+svg('play',15)+' '+(IS_APP?'Test a real alarm in 10 seconds':'Test the alarm')+'</button>';
     c+='<div class="card" style="margin-top:14px">'+sRow('mail','Still not working? Contact support','We’ll help you sort it. Your phone details are added to the email.','support',' data-k="alarm"')+'</div>';
     return {title:'Alarm troubleshooting',content:c,foot:''};
   }
@@ -2451,7 +2452,7 @@ const PRIVACY_HTML='<p class="muted">Last updated: October 2026</p>'
  +'<h4>What Rexi Rise stores</h4><p>Your plan — courses, timetable, alarms, study sessions, streaks and settings — is saved on your phone. When you create an account, a copy is also backed up to our online database (Google Firebase) so you can restore it on another phone.</p>'
  +'<h4>Your account</h4><p>We keep your name, email address and a secure sign-in token. If you use Google sign-in, Google shares your name and email with us. We never see your Google password.</p>'
  +'<h4>Microphone</h4><p>The microphone is used only while you do a speaking mission (affirmation or Bible verse). Your phone’s speech service turns your words into text so the app can check them. Rexi Rise does not record or keep any audio.</p>'
- +'<h4>Other permissions</h4><p>Alarms, notifications, full-screen and battery permissions are only used to make alarms ring on time. Strict lock and the app blocker use Accessibility only to see which app is open during a study session, so they can send you back to the timer. Nothing is recorded or sent anywhere.</p>'
+ +'<h4>Other permissions</h4><p>Alarms, notifications, full-screen and battery permissions are only used to make alarms ring on time. Rexi Rise uses Accessibility only during study sessions: to see which app is open so it can send you back to the timer, to show a full-screen “back to studying” cover when a break ends, and to turn the screen off after your phone’s screen timeout. “Display over other apps” is used for the same return-to-study cover. Do Not Disturb access is used only to silence other notifications during study time (calls still ring) and your previous setting is restored afterwards. Nothing is recorded or sent anywhere.</p>'
  +'<h4>What we don’t do</h4><p>No ads. We don’t sell or share your data with anyone.</p>'
  +'<h4>Deleting your data</h4><p>Settings → Account → Delete account permanently removes your account and online backup. Logging out removes your plan from that phone.</p>'
  +'<h4>Contact</h4><p>Questions? Email <b>'+SUPPORT_EMAIL+'</b> or WhatsApp <b>0701 381 4388</b>.</p>';
@@ -2760,7 +2761,7 @@ function renderSheet(first){
     content='<p class="sub">Answer honestly. If the reason is not valid, your session and phone lock stay on and End session is locked for 10 minutes.</p>'
       +'<label>1. What is the reason?<select class="field" id="exitReason">'+[['','Choose a reason'],['health','I feel unwell or need to see a doctor'],['emergency','There is an emergency'],['urgent','An urgent responsibility cannot wait'],['tired','I am tired or sleepy'],['distraction','I want to chat, browse, play or I am bored']].map(([v,l])=>'<option value="'+v+'"'+(SHEET.reason===v?' selected':'')+'>'+l+'</option>').join('')+'</select></label>'
       +'<label>2. What exactly happened? (at least 8 words)<textarea class="field exit-typed" id="exitDetail" placeholder="Describe what happened">'+esc(SHEET.detail||'')+'</textarea></label>'
-      +'<div class="sh-label" style="margin-top:12px">3. Can this wait until your session ends at '+endAt+'?</div><div class="theme-seg wide">'+[['yes','Yes, it can wait'],['no','No, it can’t wait']].map(([v,l])=>'<button class="'+(SHEET.wait===v?'on':'')+'" data-action="exitWait" data-v="'+v+'">'+l+'</button>').join('')+'</div>'
+      +'<label style="display:block;margin:12px 0 8px">3. Can this wait until your session ends at '+endAt+'?</label><div class="theme-seg wide">'+[['yes','Yes, it can wait'],['no','No, it can’t wait']].map(([v,l])=>'<button class="'+(SHEET.wait===v?'on':'')+'" data-action="exitWait" data-v="'+v+'">'+l+'</button>').join('')+'</div>'
       +(SHEET.err?'<p class="auth-err">'+esc(SHEET.err)+'</p>':'');
     foot='<button class="btn btn-primary btn-block" data-action="keepStudying">Keep studying</button><button class="link skip" data-action="exitReason">Check my reason</button>'; }
   else if(SHEET.kind==='setup'){const r=setupSheet();title=r.title;content=r.content;foot=r.foot;}

@@ -1,3 +1,15 @@
+## Full app checkup — 11 October 2026
+
+Walked every screen at phone size in Light and Dark mode with real-looking data: Home (Study, Alarms, Schedule), alarm menu, alarm editor, mission picker and panels, all 10 missions while ringing, sound pickers, Start studying, Focus settings, study timer, break picker, break, End early, exit questions and rejection, Plan (timetable, courses), Progress, See all sheets, recap, every Settings sheet, Phone setup and the Guide. No script errors, no screen scrolling sideways and no text running off the edge. Fixed:
+
+- "Test the alarm" buttons still used a ▶️ emoji; now a play icon.
+- Guide → Focus Mode described the old break and streak rules; rewritten for the break-time pool, the return after breaks, the automatic never-resetting streak, recaps, and the stricter early exit.
+- Progress → By subject cut subject names very short ("Structural A…"); names now get more room and wrap onto two lines.
+- Course titles in Plan → Courses were cut off with no "…"; now ellipsised.
+- Messages (toasts) could only use half the screen width and wrapped into narrow 4-line boxes; they now use the full width.
+- The third early-exit question was styled as a small uppercase heading; now matches the other two questions.
+- Privacy policy now explains the Accessibility cover and screen-timeout use, Display over other apps, and study-time Do Not Disturb.
+
 ## Phone setup checklist and build upkeep — 11 October 2026
 
 - **Phone setup** (Settings → Phone setup, and shown once after the first-run tour): one checklist with a green tick for each phone setting Rexi Rise depends on — notifications, alarms & reminders, full-screen alarms, Battery Unrestricted / background restriction, Rexi Rise accessibility, Do Not Disturb access, Display over other apps, and Auto-start on phones that have it (marked Done by you, since Android can't report it). A progress bar shows how many are left; ticks refresh when you return from the phone's settings. The Settings row shows a badge with the number still to fix.
