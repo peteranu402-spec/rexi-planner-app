@@ -97,6 +97,9 @@ public class MainActivity extends Activity {
     protected void onResume() {
         super.onResume();
         foreground = true;
+        lastTouch = android.os.SystemClock.uptimeMillis();
+        sleepHandler.removeCallbacks(sleepCheck);
+        sleepHandler.postDelayed(sleepCheck, 3000);
         // Focus follows the user's normal display timeout; only ringing alarms keep it awake.
         getWindow().clearFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         if (web != null) web.setKeepScreenOn(false);
@@ -114,8 +117,51 @@ public class MainActivity extends Activity {
         refreshPage();
     }
 
+    /*
+     * Screen sleep on the study page. Some phones never dim while the study timer is showing, so the app follows
+     * the phone's own "Screen timeout" itself: after that long without a touch during a focus session, the screen
+     * is turned off (like pressing the power button). Waking and unlocking the phone shows the study page again.
+     */
+    private long lastTouch = android.os.SystemClock.uptimeMillis();
+    private final android.os.Handler sleepHandler = new android.os.Handler(android.os.Looper.getMainLooper());
+    private final Runnable sleepCheck = new Runnable() {
+        @Override public void run() {
+            try {
+                if (foreground && FocusEngine.isActive(MainActivity.this) && !AlarmService.ringing) {
+                    android.os.PowerManager pm = getSystemService(android.os.PowerManager.class);
+                    long timeout = screenTimeoutMs();
+                    long idle = android.os.SystemClock.uptimeMillis() - lastTouch;
+                    if (pm != null && pm.isInteractive() && timeout > 0 && idle >= timeout) {
+                        lastTouch = android.os.SystemClock.uptimeMillis();
+                        FocusBlockService.lockScreen();
+                    }
+                }
+            } catch (RuntimeException ignored) {
+            }
+            if (foreground) sleepHandler.postDelayed(this, 3000);
+        }
+    };
+
+    /** The phone's Screen timeout setting; 0 when it is set to never turn off (or longer than 30 minutes). */
+    private long screenTimeoutMs() {
+        try {
+            long t = android.provider.Settings.System.getInt(getContentResolver(), android.provider.Settings.System.SCREEN_OFF_TIMEOUT, 60_000);
+            if (t <= 0 || t > 30L * 60_000L) return 0;
+            return Math.max(15_000L, t);
+        } catch (RuntimeException e) {
+            return 60_000L;
+        }
+    }
+
+    @Override
+    public void onUserInteraction() {
+        super.onUserInteraction();
+        lastTouch = android.os.SystemClock.uptimeMillis();
+    }
+
     @Override
     protected void onPause() {
+        sleepHandler.removeCallbacks(sleepCheck);
         foreground = false;
         super.onPause();
     }

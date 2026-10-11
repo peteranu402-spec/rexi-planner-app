@@ -1,3 +1,7 @@
+## Study page follows the phone's sleep timer — 11 October 2026
+
+- During a focus session the planner now enforces the phone's own Screen timeout: after that long without touching the study page, the screen turns off exactly like pressing the power button (via the Rexi Rise Accessibility service, Android 9+). Wake and unlock the phone and the study timer is still on screen; the countdown, lock and break alerts keep running while the screen is off. "Never" or timeouts over 30 minutes are respected (no auto-off), and ringing alarms are never turned off.
+
 ## Milestone study recap — 11 October 2026
 
 - Reaching 7, 14, 30 and 60 study days opens a full-screen, Wayk-style recap you tap through: total study time and sessions, longest session (subject and date), average session, most-studied subject, best day, the time of day you study best, goals reached, the level unlocked, and a confetti finish. It waits until the study timer is closed, and filled milestone circles on the Progress page reopen it any time.

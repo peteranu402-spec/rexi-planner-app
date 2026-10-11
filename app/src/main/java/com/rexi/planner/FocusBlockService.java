@@ -12,6 +12,18 @@ import android.view.accessibility.AccessibilityEvent;
  */
 public class FocusBlockService extends AccessibilityService {
     private static volatile boolean connected;
+    private static volatile FocusBlockService instance;
+
+    /** Turns the screen off (like pressing the power button). Used to honour the phone's sleep timer on the study page. */
+    static boolean lockScreen() {
+        FocusBlockService s = instance;
+        if (s == null || android.os.Build.VERSION.SDK_INT < 28) return false;
+        try {
+            return s.performGlobalAction(GLOBAL_ACTION_LOCK_SCREEN);
+        } catch (RuntimeException e) {
+            return false;
+        }
+    }
     private static volatile long lastHealthyTick;
 
     /** An enabled setting alone does not prove Android has bound a working service. */
@@ -60,6 +72,7 @@ public class FocusBlockService extends AccessibilityService {
     @Override protected void onServiceConnected() {
         super.onServiceConnected();
         connected = true;
+        instance = this;
         lastHealthyTick = android.os.SystemClock.elapsedRealtime();
         deadlineHandler.removeCallbacks(deadlineCheck);
         deadlineHandler.post(deadlineCheck);
@@ -68,6 +81,7 @@ public class FocusBlockService extends AccessibilityService {
     private void disconnected() {
         if (overlay != null) overlay.hide();
         connected = false;
+        instance = null;
         lastHealthyTick = 0;
         deadlineHandler.removeCallbacks(deadlineCheck);
     }
