@@ -93,3 +93,13 @@ exitInput.value='I';exitInput.fire('input');exitInput.value=ctx.EXIT_PHRASE;exit
 exitInput.value='';exitInput.fire('input');assert.equal(exitInput.value,'','normal deletion stays usable');
 assert.ok(body.children[0].textContent.includes('Type the sentence yourself'));
 console.log('Early-exit phrase selection/copy, paste/drop and keyboard clipboard restrictions passed.');
+// Streak: marked automatically by reaching a study goal, and a missed day never resets it.
+{const sctx={S:{streakCount:6,lastCheckin:'2026-10-01',longest:6},LEVELS:[{at:7,name:'Rookie'},{at:14,name:'Steady'}],FOCUS_OPEN:true,save(){},render(){},toast(){},celebrate(){},today:'2026-10-11'};
+ sctx.todayISO=()=>sctx.today;sctx.addDays=(d,n)=>d;vm.createContext(sctx);
+ vm.runInContext(html.slice(html.indexOf('function streakInfo(){'),html.indexOf('function gradeInfo(')),sctx);
+ vm.runInContext(html.slice(html.indexOf('function markToday(quiet){'),html.indexOf('function undoToday(')),sctx);
+ assert.equal(sctx.streakInfo().count,6,'missing days does not reset the streak');
+ assert.equal(sctx.markToday(true),true);assert.equal(sctx.S.streakCount,7,'reaching a goal after a gap adds a day');
+ assert.equal(sctx.markToday(true),false);assert.equal(sctx.S.streakCount,7,'only one day per date');
+ assert.ok(!html.includes('data-action="markToday"')&&!html.includes('data-action="undoToday"'),'no manual mark or undo buttons');
+ console.log('Automatic, non-resetting streak checks passed.');}

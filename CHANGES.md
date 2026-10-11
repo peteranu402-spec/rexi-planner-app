@@ -1,3 +1,9 @@
+## Automatic streak that never resets — 11 October 2026
+
+- A streak day is added only automatically, when you reach a study session goal. The "Mark today" button, tapping today's circle and undo were removed.
+- Missing a day no longer resets the streak to 0; your count keeps building from where it was. One day is added per date at most.
+- The streak milestone rings (7, 14, 30, 60) use the brand colour instead of yellow.
+
 ## Alarm screens follow the Light theme — 11 October 2026
 
 - One button colour everywhere: main buttons and selected options (Start session, Save Alarm, subject chips, durations, segmented tabs, weekdays, days in Plan, difficulty) are black in Light mode and white in Dark mode. Orange-brown stays for links, ticks, switches and progress; the dark study timer and ringing screens keep orange buttons so they stand out.

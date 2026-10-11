@@ -120,6 +120,8 @@ nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:6;display:flex;justify-c
 .pad{padding:18px}
 .h-sec{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:0 2px 10px}
 .al-head{position:relative;align-items:center}
+.sl-auto{font:500 11.5px/1.35 var(--sans);color:var(--muted);text-align:right;flex:none}
+.dots-grid .dot{display:grid;place-items:center}
 .said{color:#2E9E5B;font-weight:inherit}
 .wk-verse .said,.verse .said{color:#4CC97E}
 .ico{display:inline-flex;vertical-align:-3px;margin-right:6px}
@@ -230,7 +232,7 @@ nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:6;display:flex;justify-c
 .dot{aspect-ratio:1;border-radius:50%;display:grid;place-items:center;font:600 10px var(--sans);border:1.5px solid var(--line);background:var(--surface-2);color:var(--faint);padding:0}
 .dot.f{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
 .dot.tgt{border-style:dashed;border-color:var(--accent);color:var(--accent);background:var(--accent-soft);animation:pulse 1.8s ease-in-out infinite}
-.dot.ms{box-shadow:0 0 0 2px var(--bg),0 0 0 3.5px var(--semi)}
+.dot.ms{box-shadow:0 0 0 2px var(--bg),0 0 0 3.5px var(--brand)}
 @keyframes pulse{0%,100%{box-shadow:0 0 0 0 color-mix(in srgb,var(--accent) 35%,transparent)}50%{box-shadow:0 0 0 6px transparent}}
 .list{display:flex;flex-direction:column}
 .list > div{display:flex;gap:14px;padding:14px 16px;border-top:1px solid var(--line);align-items:flex-start}
@@ -1182,8 +1184,8 @@ function set(patch,rerender=true){Object.assign(S,patch);save();if(rerender)rend
 function callName(){return (S&&S.name||'').trim().replace(/\s+/g,' ');}
 function streakInfo(){
   const t=todayISO(),y=addDays(t,-1);
-  const broken=S.lastCheckin&&S.lastCheckin!==t&&S.lastCheckin!==y;
-  const count=broken?0:(S.streakCount||0);
+  // Your streak only grows: a day is added automatically when you reach a study goal, and missing a day never resets it.
+  const count=S.streakCount||0;
   let level='Rising';for(const L of LEVELS){if(count>=L.at)level=L.name;}
   const nxt=LEVELS.find(L=>count<L.at),nextAt=nxt?nxt.at:null;
   const prevAt=[0,...LEVELS.map(l=>l.at)].filter(a=>a<=count).pop();
@@ -1340,7 +1342,7 @@ function vHomeInner(){
     h+='<div class="card study-card"><div class="sc-row"><div class="sc-tx"><div class="label">Study today</div><b>'+hm(today)+'<small> of '+hm(goal)+'</small></b></div><button class="btn btn-primary" data-action="startFocus">'+svg('play',16)+'Start studying</button></div><div class="bar"><i style="width:'+pct+'%"></i></div></div>';
   }
   // Streak
-  h+='<div class="card streak-line"><span class="fl">'+svg('flame',20)+'</span><div class="sl-tx"><b>'+st.count+'-day streak</b><span>'+st.level+' · '+st.nextLabel+'</span></div>'+(st.checked?'<span class="done-pill">'+svg('check',15,2.4)+'Done today</span>':'<button class="btn btn-ghost btn-sm" data-action="markToday">Mark today</button>')+'</div>';
+  h+='<div class="card streak-line"><span class="fl">'+svg('flame',20)+'</span><div class="sl-tx"><b>'+st.count+'-day streak</b><span>'+st.level+' · '+st.nextLabel+'</span></div>'+(st.checked?'<span class="done-pill">'+svg('check',15,2.4)+'Done today</span>':'<span class="sl-auto">Reach a study goal<br>to mark today</span>')+'</div>';
   return h;
 }
 
@@ -1431,9 +1433,9 @@ function vProgress(){
   const rows=weeklySubjectRows();
   if(rows.length)h+='<div><div class="h-sec"><h2>By subject this week</h2>'+'<button class="link" style="flex-shrink:0" data-action="allSubjects">See all</button>'+'</div><div class="card pad by-course">'+subjectRowsHTML(rows.slice(0,3),rows[0][1])+'</div></div>';
   // streak chain
-  h+='<div><div class="h-sec"><h2>Streak</h2><span class="muted" style="font-size:12.5px">'+st.level+' · best '+(S.longest||0)+'d</span></div><div class="card pad"><div class="bar" style="height:8px;margin:0 0 6px"><i style="width:'+st.pct+'%"></i></div><p class="help" style="margin:0 0 14px">'+st.nextLabel+'. '+(st.checked?'Today is marked ✓ — tap it to undo.':'Finish a study goal or tap today’s circle.')+'</p><div class="dots-grid">';
+  h+='<div><div class="h-sec"><h2>Streak</h2><span class="muted" style="font-size:12.5px">'+st.level+' · best '+(S.longest||0)+'d</span></div><div class="card pad"><div class="bar" style="height:8px;margin:0 0 6px"><i style="width:'+st.pct+'%"></i></div><p class="help" style="margin:0 0 14px">'+st.nextLabel+'. '+(st.checked?'Today is marked ✓ — you reached a study goal.':'Today is marked automatically when you reach a study session goal.')+' Missing a day never resets your streak.</p><div class="dots-grid">';
   for(let i=0;i<60;i++){const f=i<st.count,tgt=i===st.count&&!st.checked&&st.count<60,undo=st.checked&&i===st.count-1,ms=[7,14,30,60].includes(i+1);
-    h+='<button class="dot'+(f?' f':'')+(tgt?' tgt':'')+(ms&&!f?' ms':'')+'" '+(tgt?'data-action="markToday" aria-label="Mark today"':undo?'data-action="undoToday" aria-label="Undo today"':'tabindex="-1" disabled')+'>'+(i+1)+'</button>';}
+    h+='<span class="dot'+(f?' f':'')+(tgt?' tgt':'')+(ms&&!f?' ms':'')+'" aria-label="Day '+(i+1)+(f?' done':'')+'">'+(i+1)+'</span>';}
   h+='</div></div></div>';
   // recent sessions
   const rec=recentSessionRows();
@@ -2445,8 +2447,8 @@ function refreshOverall(){
 
 /* ---------- streak ---------- */
 function markToday(quiet){
-  const t=todayISO(),y=addDays(t,-1);if(S.lastCheckin===t)return false;
-  const count=S.lastCheckin===y?(S.streakCount||0)+1:1;
+  const t=todayISO();if(S.lastCheckin===t)return false;
+  const count=(S.streakCount||0)+1;
   S.streakCount=count;S.lastCheckin=t;S.longest=Math.max(S.longest||0,count);save();
   if(!FOCUS_OPEN)render();
   const L=LEVELS.find(l=>l.at===count);
@@ -3659,8 +3661,7 @@ document.addEventListener('click',e=>{
     case 'clearSubjects':{const courses=weeklySubjectRows().map(r=>r[0]);if(!courses.length)break;ask('Remove these subjects?','The listed subjects will be hidden. Study history and totals stay saved.','Remove',true).then(ok=>{if(ok)hideProgressSubjects(courses);});break;}
     case 'allSessions':openSheet({kind:'allSessions'});break;
     case 'allSubjects':openSheet({kind:'allSubjects'});break;
-    case 'markToday':markToday();break;
-    case 'undoToday':undoToday();break;
+    // Streak days are only marked automatically by reaching a study goal (no manual mark or undo).
     case 'closeCelebrate':$('#layer').innerHTML='';break;
     /* focus mode */
     case 'startFocus':case 'openFocus':openFocusStart();break;
@@ -3817,8 +3818,6 @@ function toast(msg){let t=$('#toast');if(!t){t=document.createElement('div');t.i
     window.__planner={state:()=>S,task:()=>M&&M.task};
     return;
   }
-  const t=todayISO(),y=addDays(t,-1);
-  if(S.lastCheckin&&S.lastCheckin!==t&&S.lastCheckin!==y){S.streakCount=0;S.lastCheckin='';save();}
   applyTheme();
   focusBoot();
   // Swipe left / right to move between side-by-side tabs: Home (Study · Alarms · Schedule),
