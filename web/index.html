@@ -134,7 +134,8 @@ nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:6;display:flex;justify-c
 .rc-sub{font:500 15px/1.45 var(--sans);color:var(--muted);margin-top:12px;max-width:300px}
 .rc-tap{position:absolute;bottom:26px;left:0;right:0;font:500 13px var(--sans);color:var(--faint)}
 .rc-ic{width:100px;height:100px;border-radius:50%;background:var(--accent-soft);color:var(--brand);display:grid;place-items:center}
-.rc-medal{width:96px;height:96px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#F3B496,#C4572F 60%,#8A3517);color:#fff;display:grid;place-items:center;font:800 40px var(--sans)}
+.rc-lvl{width:120px;height:120px;border-radius:50%;background:var(--accent-soft);color:var(--brand);display:grid;place-items:center}
+.rc-pips{display:flex;gap:8px;margin-top:22px}.rc-pips span{font:600 11px var(--sans);color:var(--faint);display:flex;flex-direction:column;align-items:center;gap:6px}.rc-pips i{width:34px;height:6px;border-radius:6px;background:var(--line)}.rc-pips .on{color:var(--ink)}.rc-pips .on i{background:var(--brand)}
 .rc-confetti{position:absolute;inset:18% 0 auto 0;height:30%;pointer-events:none}
 .rc-confetti i{position:absolute;width:9px;height:12px;border-radius:2.5px;opacity:.85;animation:rcpop .6s ease both}
 @keyframes rcpop{from{opacity:0;transform:scale(.3)}}
@@ -1112,6 +1113,9 @@ Object.assign(ICON,{
   zap:'<path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/>',
   hardHat:'<path d="M2 18a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1zM10 10V5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v5M4 15v-3a6 6 0 0 1 6-6M14 6a6 6 0 0 1 6 6v3"/>',
   scroll:'<path d="M15 12h-5M15 8h-5M19 17V5a2 2 0 0 0-2-2H4"/><path d="M8 21h12a2 2 0 0 0 2-2v-1a1 1 0 0 0-1-1H11a1 1 0 0 0-1 1v1a2 2 0 1 1-4 0V5a2 2 0 1 0-4 0v2a1 1 0 0 0 1 1h3"/>',
+  sprout:'<path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/>',
+  crown:'<path d="M11.6 3.3a.5.5 0 0 1 .9 0l2.9 5.6a1 1 0 0 0 1.5.3l4.3-3.6a.5.5 0 0 1 .8.5l-2.8 10.4a1 1 0 0 1-1 .7H5.8a1 1 0 0 1-1-.7L2 6.1a.5.5 0 0 1 .8-.5l4.3 3.6a1 1 0 0 0 1.5-.3z"/><path d="M5 21h14"/>',
+  rocket:'<path d="M4.5 16.5c-1.5 1.3-2 5-2 5s3.7-.5 5-2c.7-.8.7-2.1-.1-2.9a2.2 2.2 0 0 0-2.9-.1z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.9A12.9 12.9 0 0 1 22 2c0 2.7-.8 7.5-6 11a22.4 22.4 0 0 1-4 2z"/><path d="M9 12H4s.6-3 2-4c1.6-1.1 5 0 5 0M12 15v5s3-.6 4-2c1.1-1.6 0-5 0-5"/>',
   brain:'<path d="M12 5a3 3 0 1 0-6 .1 4 4 0 0 0-2.5 5.8 4 4 0 0 0 .5 6.6A4 4 0 1 0 12 18Z"/><path d="M12 5a3 3 0 1 1 6 .1 4 4 0 0 1 2.5 5.8 4 4 0 0 1-.5 6.6A4 4 0 1 1 12 18Z"/><path d="M12 5v13"/>',
   flame:'<path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.4-.5-2-1-3-1.1-2.1-.2-4 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.2.4-2.3 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>'
 });
@@ -2504,7 +2508,8 @@ function recapSlides(count){
     if(st.block)sl.push('<div class="rc-k">You study best in the</div><div class="rc-ic">'+svg(st.block[0]==='Morning'?'sunrise':st.block[0]==='Night'?'moon':'sun',40,1.8)+'</div><div class="rc-h2">'+esc(st.block[0])+'</div><div class="rc-sub">'+hm(st.block[1])+' of your study time</div>');
     sl.push('<div class="rc-k">Goals reached</div><div class="rc-big">'+st.goals+'</div><div class="rc-sub">session'+(st.goals===1?'':'s')+' finished on target</div>');
   }
-  if(L.name)sl.push('<div class="rc-k">Level unlocked</div><div class="rc-medal">'+esc(L.name.charAt(0))+'</div><div class="rc-h2">'+esc(L.name)+'</div><div class="rc-sub">Reward: '+esc(L.reward)+'</div>');
+  if(L.name){const icons={7:'sprout',14:'flame',30:'crown',60:'rocket'};
+    sl.push('<div class="rc-k">Level unlocked</div><div class="rc-lvl">'+svg(icons[L.at]||'star',58,1.7)+'</div><div class="rc-h2">'+esc(L.name)+'</div><div class="rc-sub">'+esc(L.d||'')+(L.d?'. ':'')+'Reward yourself: '+esc(String(L.reward||'').replace(/^A /,'a '))+'.</div><div class="rc-pips">'+LEVELS.map(l=>'<span class="'+(l.at<=count?'on':'')+'"><i></i>'+l.at+'d</span>').join('')+'</div>');}
   sl.push('<div class="rc-confetti">'+confettiHTML(60)+'</div><div class="rc-sub">Keep studying with</div><div class="rc-h1">Rexi Rise</div>');
   return sl;
 }
