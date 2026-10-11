@@ -1,5 +1,7 @@
 ## Study page follows the phone's sleep timer — 11 October 2026
 
+- **Alarm reliability:** each scheduled alarm now records when it is due. If it rings more than 2 minutes late (the phone held the app back while it was closed — common on Tecno, Infinix, itel, Xiaomi, Oppo, Vivo), the Alarms tab shows "Your 6:00 AM alarm rang 23 min late" with Fix buttons for Battery → Unrestricted and auto-start, and a tip not to swipe the app away. The setup card now also flags Android's "background restricted" setting. Alarms are re-registered whenever the Rexi Rise service restarts, in case the phone cleared them.
+
 - During a focus session the planner now enforces the phone's own Screen timeout: after that long without touching the study page, the screen turns off exactly like pressing the power button (via the Rexi Rise Accessibility service, Android 9+). Wake and unlock the phone and the study timer is still on screen; the countdown, lock and break alerts keep running while the screen is off. "Never" or timeouts over 30 minutes are respected (no auto-off), and ringing alarms are never turned off.
 
 ## Milestone study recap — 11 October 2026

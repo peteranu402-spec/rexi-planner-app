@@ -120,6 +120,7 @@ nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:6;display:flex;justify-c
 .pad{padding:18px}
 .h-sec{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:0 2px 10px}
 .al-head{position:relative;align-items:center}
+.late-alarm .btn-sm{white-space:nowrap}
 .recap{position:fixed;inset:0;z-index:96;background:var(--bg);color:var(--ink);display:flex;flex-direction:column;padding:calc(env(safe-area-inset-top) + 14px) 0 calc(env(safe-area-inset-bottom) + 12px);animation:fade .2s ease}
 .rc-top{display:flex;align-items:center;gap:14px;padding:0 18px}
 .rc-bars{flex:1;display:flex;gap:5px}.rc-bars i{flex:1;height:3px;border-radius:3px;background:var(--line)}.rc-bars i.on{background:var(--ink)}
@@ -2550,6 +2551,7 @@ function permProblems(){
   if(st.fullScreen===false)out.push(['fullscreen','Allow full-screen alarms','Lets the alarm appear over your lock screen.']);
   if(st.exact===false)out.push(['exact','Allow alarms & reminders','So alarms ring at the exact minute.']);
   if(st.battery===false)out.push(['battery','Don’t optimise battery for this app','Stops your phone from silencing alarms to save power.']);
+  if(st.bg===false)out.push(['bg','Remove background restriction','In App info → Battery, choose Unrestricted so alarms can ring while the app is closed.']);
   return out;
 }
 function nextAlarm(){
@@ -2602,6 +2604,15 @@ function homeAlarms(){
   let h='';
   if(IS_APP){
     const probs=permProblems();
+    const st=nativeStatus();
+    if(st&&st.lateMin>=2&&st.lateDue&&Date.now()-st.lateDue<7*86400000){
+      const at=new Date(st.lateDue).toLocaleTimeString([], {hour:'numeric',minute:'2-digit'}),maker=String(st.maker||'');
+      const oem=/xiaomi|redmi|poco|tecno|infinix|itel|oppo|realme|vivo|huawei|honor|oneplus/.test(maker);
+      h+='<div class="card perm late-alarm"><div class="perm-head">'+svg('alert',20)+'<div><b>Your '+at+' alarm rang '+st.lateMin+' min late</b><span>Your phone held Rexi Rise back while it was closed. Fix these so alarms ring on time:</span></div></div>'
+        +'<div class="set-row"><div class="k">Battery: Unrestricted<small>App info → Battery → Unrestricted / No restrictions</small></div><button class="btn btn-primary btn-sm" data-action="fixPerm" data-w="battery">Fix</button></div>'
+        +(oem?'<div class="set-row"><div class="k">Allow auto-start<small>Your phone’s phone manager / security app</small></div><button class="btn btn-primary btn-sm" data-action="fixPerm" data-w="autostart">Fix</button></div>':'')
+        +'<div class="set-row"><div class="k">Don’t swipe Rexi Rise away<small>Closing it from Recent apps can stop alarms on some phones</small></div><button class="btn btn-ghost btn-sm" data-action="lateOk">Got it</button></div></div>';
+    }
     if(probs.length)h+='<div class="card perm"><div class="perm-head">'+svg('bell',20)+'<div><b>Finish setting up alarms</b><span>Your phone needs these so alarms can wake you.</span></div></div>'+probs.map(p=>'<div class="set-row"><div class="k">'+p[1]+'<small>'+p[2]+'</small></div><button class="btn btn-primary btn-sm" data-action="fixPerm" data-w="'+p[0]+'">Fix</button></div>').join('')+'</div>';
   }
   h+='<div class="alarm-list"><div class="h-sec al-head"><h2>Alarms</h2><button class="al-more" data-action="alarmMenu" aria-label="Alarm menu" aria-haspopup="menu" aria-expanded="'+ALARM_MENU+'"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.9"/><circle cx="12" cy="12" r="1.9"/><circle cx="19" cy="12" r="1.9"/></svg></button>'+(ALARM_MENU?alarmMenuHTML():'')+'</div>';
@@ -3720,6 +3731,7 @@ document.addEventListener('click',e=>{
     case 'allSubjects':openSheet({kind:'allSubjects'});break;
     // Streak days are only marked automatically by reaching a study goal (no manual mark or undo).
     case 'recapNext':if(RECAP){if(RECAP.i<RECAP.slides.length-1){RECAP.i++;drawRecap();}else{RECAP=null;drawRecap();}}break;
+    case 'lateOk':try{window.AndroidAlarm.clearLate();}catch(e){}render();break;
     case 'recapClose':RECAP=null;drawRecap();break;
     case 'openRecap':openRecap(+el.dataset.n);break;
     /* focus mode */

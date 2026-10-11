@@ -116,6 +116,13 @@ final class AlarmScheduler {
     }
 
     private static void setExact(Context c, AlarmManager am, int code, String info, long when) {
+        // Remember when it is due, so a late ring (phone holding the app back) can be detected and explained.
+        try {
+            JSONObject j = new JSONObject(info == null ? "{}" : info);
+            j.put("due", when);
+            info = j.toString();
+        } catch (JSONException ignored) {
+        }
         PendingIntent op = PendingIntent.getBroadcast(c, code, fireIntent(c, info),
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         boolean exactAllowed = Build.VERSION.SDK_INT < 31 || am.canScheduleExactAlarms();

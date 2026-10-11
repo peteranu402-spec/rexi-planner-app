@@ -8,6 +8,18 @@ import android.os.Looper;
 
 /** Receives alarm firings, plus phone restarts / time changes (to re-schedule alarms). */
 public class AlarmReceiver extends BroadcastReceiver {
+    /** Records an alarm that rang more than 2 minutes after its time (Android or the phone maker delayed it). */
+    static void noteLateness(Context context, String info) {
+        try {
+            long due = new org.json.JSONObject(info == null ? "{}" : info).optLong("due", 0);
+            long late = System.currentTimeMillis() - due;
+            if (due > 0 && late > 120_000L) {
+                AlarmStore.prefs(context).edit().putLong("lateDue", due).putLong("lateMs", late).apply();
+            }
+        } catch (Exception ignored) {
+        }
+    }
+
     @Override
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
@@ -28,6 +40,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         }
         if (AlarmScheduler.ACTION_FIRE.equals(action)) {
             String info = intent.getStringExtra("info");
+            noteLateness(context, info);
             Intent ring = new Intent(context, AlarmService.class);
             ring.setAction(AlarmService.ACTION_RING);
             ring.putExtra("info", info == null ? "{}" : info);

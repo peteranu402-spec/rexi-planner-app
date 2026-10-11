@@ -73,6 +73,8 @@ public class FocusBlockService extends AccessibilityService {
         super.onServiceConnected();
         connected = true;
         instance = this;
+        // The phone may have cleared our alarms while the app was killed; put them back whenever the service restarts.
+        try { AlarmScheduler.scheduleAll(this); } catch (RuntimeException ignored) { }
         lastHealthyTick = android.os.SystemClock.elapsedRealtime();
         deadlineHandler.removeCallbacks(deadlineCheck);
         deadlineHandler.post(deadlineCheck);

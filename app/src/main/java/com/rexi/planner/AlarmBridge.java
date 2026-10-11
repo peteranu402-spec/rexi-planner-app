@@ -299,6 +299,11 @@ public class AlarmBridge {
     }
 
     @JavascriptInterface
+    public void clearLate() {
+        AlarmStore.prefs(activity).edit().remove("lateDue").remove("lateMs").apply();
+    }
+
+    @JavascriptInterface
     public void setSchedule(String json) {
         AlarmStore.saveSchedule(activity, json);
         AlarmScheduler.scheduleAll(activity);
@@ -347,6 +352,9 @@ public class AlarmBridge {
             }
             o.put("dnd", dndOk);
             o.put("dndAccess", FocusDnd.hasAccess(activity));
+            android.content.SharedPreferences ap = AlarmStore.prefs(activity);
+            o.put("lateDue", ap.getLong("lateDue", 0));
+            o.put("lateMin", Math.round(ap.getLong("lateMs", 0) / 60000.0));
             o.put("overlay", Settings.canDrawOverlays(activity));
 
             boolean bgOk = true;
