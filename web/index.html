@@ -124,8 +124,24 @@ nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:6;display:flex;justify-c
 .setup-bar{height:6px;border-radius:6px;background:var(--line);overflow:hidden;margin:0 0 14px}.setup-bar i{display:block;height:100%;background:var(--brand);border-radius:6px}
 .setup-list .set-row{gap:12px;justify-content:flex-start}
 .setup-list .set-row .k{flex:1;min-width:0;text-align:left}
-.setup-ic{width:24px;height:24px;border-radius:50%;border:2px solid var(--faint);display:grid;place-items:center;flex:none;color:#fff}
+.setup-ic{width:24px;height:24px;border-radius:50%;border:2px solid var(--faint);display:grid;place-items:center;flex:none;box-sizing:border-box}
 .setup-ic.ok{background:#2E9E5B;border-color:#2E9E5B}
+.setup-ic svg{display:block}
+.gs-go{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:12px 18px}
+.gs-go b{font:700 15px/1.2 var(--sans)}.gs-go small{font:500 12px/1.2 var(--sans);opacity:.75}
+.gs-steps{display:flex;gap:6px;margin:4px 0 0}.gs-steps i{flex:1;height:5px;border-radius:5px;background:var(--line)}.gs-steps i.done{background:#2E9E5B}.gs-steps i.on{background:var(--brand)}
+.gs-step,.gs-done{display:flex;flex-direction:column;align-items:center;text-align:center;padding:40px 8px 12px}
+.gs-ic{width:76px;height:76px;border-radius:50%;background:var(--accent-soft);color:var(--brand);display:grid;place-items:center;margin-bottom:18px}
+.gs-ic svg{display:block}
+.gs-okbig{width:84px;height:84px;border-radius:50%;background:#2E9E5B;display:grid;place-items:center;margin-bottom:18px}
+.gs-okbig svg{display:block}
+.gs-kick{font:700 11.5px var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.gs-title{font:800 26px/1.15 var(--sans);letter-spacing:-.02em;color:var(--ink);margin-top:6px}
+.gs-sub{font:500 15px/1.45 var(--sans);color:var(--ink-2);margin:10px 0 0;max-width:300px;text-wrap:balance}
+.gs-wait{font:500 13px var(--sans);color:var(--muted);margin:18px 0 0}
+.gs-q{font:600 15px var(--sans);color:var(--ink);margin:22px 0 10px}
+.gs-row{display:flex;gap:10px;width:100%;max-width:300px}.gs-row .btn{flex:1}
+.gs-again{border:1.5px solid var(--line)!important;color:var(--ink)!important;background:var(--surface)!important}
 .setup-list .btn-sm{white-space:nowrap;flex:none}
 
 .late-alarm .btn-sm{white-space:nowrap}
@@ -1122,6 +1138,7 @@ Object.assign(ICON,{
   zap:'<path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/>',
   hardHat:'<path d="M2 18a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1zM10 10V5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v5M4 15v-3a6 6 0 0 1 6-6M14 6a6 6 0 0 1 6 6v3"/>',
   scroll:'<path d="M15 12h-5M15 8h-5M19 17V5a2 2 0 0 0-2-2H4"/><path d="M8 21h12a2 2 0 0 0 2-2v-1a1 1 0 0 0-1-1H11a1 1 0 0 0-1 1v1a2 2 0 1 1-4 0V5a2 2 0 1 0-4 0v2a1 1 0 0 0 1 1h3"/>',
+  tick:'<path d="M6.8 11.35l3.7 3.7 7.3-7.6"/>',
   sprout:'<path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/>',
   crown:'<path d="M11.6 3.3a.5.5 0 0 1 .9 0l2.9 5.6a1 1 0 0 0 1.5.3l4.3-3.6a.5.5 0 0 1 .8.5l-2.8 10.4a1 1 0 0 1-1 .7H5.8a1 1 0 0 1-1-.7L2 6.1a.5.5 0 0 1 .8-.5l4.3 3.6a1 1 0 0 0 1.5-.3z"/><path d="M5 21h14"/>',
   rocket:'<path d="M4.5 16.5c-1.5 1.3-2 5-2 5s3.7-.5 5-2c.7-.8.7-2.1-.1-2.9a2.2 2.2 0 0 0-2.9-.1z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.9A12.9 12.9 0 0 1 22 2c0 2.7-.8 7.5-6 11a22.4 22.4 0 0 1-4 2z"/><path d="M9 12H4s.6-3 2-4c1.6-1.1 5 0 5 0M12 15v5s3-.6 4-2c1.1-1.6 0-5 0-5"/>',
@@ -1294,8 +1311,14 @@ function renderTour(){
   if(st.home&&S.homeTab!==st.home){S.homeTab=st.home;render();return;}
   cancelAnimationFrame(tourRaf);tourRaf=requestAnimationFrame(placeTour);
 }
+/* Keep the highlight glued to its target: the page can still be settling (fonts, images, animations, keyboard,
+   rotation) when a step opens, so re-measure every 150 ms while the tour is showing and move it if the target moved. */
+let tourWatch=0,tourLast='';
+function tourTargetBox(){const st=COACH[TOUR_I],tg=st&&st.sel?document.querySelector(st.sel):null;if(!tg)return '';const r=tg.getBoundingClientRect();return [r.left,r.top,r.width,r.height].map(v=>Math.round(v)).join(',');}
+function watchTour(){clearInterval(tourWatch);tourWatch=setInterval(()=>{if(!document.getElementById('tour')){clearInterval(tourWatch);return;}const b=tourTargetBox();if(b!==tourLast)placeTour();},150);}
 function placeTour(){
   const st=COACH[TOUR_I],last=TOUR_I===COACH.length-1;
+  tourLast=tourTargetBox();if(!tourWatch)watchTour();
   let el=document.getElementById('tour');
   if(!el){el=document.createElement('div');el.id='tour';document.body.appendChild(el);}
   const tg=st.sel?document.querySelector(st.sel):null;
@@ -1322,7 +1345,7 @@ function placeTour(){
     +(last?'':'<button class="link" data-action="tourDone">Skip</button>')
     +'<button class="btn btn-primary btn-sm" data-action="'+(last?'tourDone':'tourNext')+'">'+(last?'Got it':'Next')+'</button></div></div>';
 }
-function closeTour(){cancelAnimationFrame(tourRaf);const el=document.getElementById('tour');if(el)el.remove();}
+function closeTour(){cancelAnimationFrame(tourRaf);clearInterval(tourWatch);tourWatch=0;const el=document.getElementById("tour");if(el)el.remove();}
 window.addEventListener('resize',()=>{if(document.getElementById('tour'))placeTour();});
 function render(){
   if(needAuth()){renderAuth();return;}
@@ -2558,26 +2581,62 @@ function nativeStatus(){
 function setupItems(){
   const st=nativeStatus()||{},maker=String(st.maker||''),oem=/xiaomi|redmi|poco|tecno|infinix|itel|oppo|realme|vivo|huawei|honor|oneplus|samsung/.test(maker);
   const items=[
-    {k:'notif',ok:st.notif!==false,t:'Notifications',d:'So alarms, break and goal alerts can show.'},
-    {k:'exact',ok:st.exact!==false,t:'Alarms & reminders',d:'Alarms ring at the exact minute.'},
-    {k:'fullscreen',ok:st.fullScreen!==false,t:'Full-screen alarms',d:'The alarm appears over your lock screen.'},
-    {k:'battery',ok:st.battery!==false&&st.bg!==false,t:'Battery: Unrestricted',d:'Your phone won’t hold alarms back to save power.',w:st.bg===false?'bg':'battery'},
-    {k:'accessibility',ok:blockerOn(),t:'Rexi Rise accessibility',d:'Needed for the study lock, the return after breaks and the screen timeout.'},
-    {k:'dndaccess',ok:st.dndAccess!==false,t:'Do Not Disturb access',d:'Only calls come through while you study.'},
-    {k:'overlay',ok:st.overlay!==false,t:'Display over other apps',d:'Brings you back to the study page when a break ends.'}];
-  if(oem)items.push({k:'autostart',ok:!!S.autostartDone,manual:true,t:'Auto-start',d:'Your phone’s phone-manager or security app. Tap Open, switch Rexi Rise on, then tap Done.'});
+    {k:'notif',ic:'bell',ok:st.notif!==false,t:'Notifications',d:'So alarms, break and goal alerts can show.',h:'Tap Allow.'},
+    {k:'battery',ic:'zap',ok:st.battery!==false&&st.bg!==false,t:'Battery: Unrestricted',d:'Your phone won’t hold alarms back to save power.',w:st.battery===false?'battery':'bg',h:st.battery===false?'Tap Allow.':'Tap Battery, choose Unrestricted, then press Back.'},
+    {k:'accessibility',ic:'shield',ok:blockerOn(),t:'Rexi Rise accessibility',d:'For the study lock, the return after breaks and the screen timeout.',h:'Open Rexi Rise, switch it on, then press Back.'},
+    {k:'dndaccess',ic:'moon',ok:st.dndAccess!==false,t:'Do Not Disturb access',d:'Only calls come through while you study.',h:'Turn on Rexi Rise, then press Back.'},
+    {k:'overlay',ic:'missionMode',ok:st.overlay!==false,t:'Display over other apps',d:'Brings you back to the study page when a break ends.',h:'Switch it on, then press Back.'},
+    {k:'fullscreen',ic:'alarms',ok:st.fullScreen!==false,t:'Full-screen alarms',d:'The alarm appears over your lock screen.',h:'Switch it on, then press Back.'},
+    {k:'exact',ic:'alarmClock',ok:st.exact!==false,t:'Alarms & reminders',d:'Alarms ring at the exact minute.',h:'Switch it on, then press Back.'}];
+  if(oem)items.push({k:'autostart',ic:'rocket',ok:!!S.autostartDone,manual:true,t:'Auto-start',d:'In your phone’s phone-manager or security app.',h:'Find Rexi Rise, switch it on, then press Back.'});
   return items;
 }
 function setupLeft(){return IS_APP?setupItems().filter(i=>!i.ok).length:0;}
-function setupSheet(){
-  const items=setupItems(),done=items.filter(i=>i.ok).length;
-  let c='<p class="sub" style="margin:0 0 12px">'+(done===items.length?'All set — alarms and the study lock have everything they need.':'Rexi Rise needs these so alarms ring on time and the study lock works. '+(items.length-done)+' left.')+'</p>';
-  c+='<div class="setup-bar"><i style="width:'+Math.round(done/items.length*100)+'%"></i></div>';
-  c+='<div class="card setup-list">'+items.map(i=>'<div class="set-row"><span class="setup-ic'+(i.ok?' ok':'')+'">'+(i.ok?svg('check',15,3):'')+'</span><div class="k">'+i.t+'<small>'+i.d+'</small></div>'
-    +(i.ok?(i.manual?'<button class="btn btn-ghost btn-sm" data-action="setupUndo">Undo</button>':''):'<button class="btn btn-primary btn-sm" data-action="fixPerm" data-w="'+(i.w||i.k)+'">'+(i.manual?'Open':'Allow')+'</button>'+(i.manual?'<button class="btn btn-ghost btn-sm" data-action="setupDone">Done</button>':''))+'</div>').join('')+'</div>';
-  c+='<p class="help" style="margin-top:12px">Ticks update when you come back from your phone’s settings.</p>';
-  return {title:'Phone setup',content:c,foot:'<button class="btn btn-primary btn-block" data-action="closeSheet">'+(done===items.length?'Done':'Finish later')+'</button>'};
+let SETUP_RUN=null;
+// Optically centred white tick (measured at 3x): large sizes need their own fine offset.
+const tickSvg=(size)=>'<svg width="'+size+'" height="'+size+'" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="'+(size>=30?2.4:2.8)+'" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(size>=30?'<path d="M6.6 11.75l3.7 3.7 7.3-7.6"/>':ICON.tick)+'</svg>';
+function startSetup(){const q=setupItems().filter(i=>!i.ok).map(i=>i.k);SETUP_RUN={queue:q,i:0,waiting:false,ask:false};if(!q.length){SETUP_RUN.done=true;renderSheet();return;}runSetupStep();}
+function runSetupStep(){
+  const r=SETUP_RUN;if(!r)return;const it=setupItems().find(x=>x.k===r.queue[r.i]);
+  if(!it){nextSetupStep();return;}
+  if(it.ok){nextSetupStep();return;}
+  r.waiting=false;renderSheet();
+  setTimeout(()=>{if(SETUP_RUN!==r)return;r.waiting=true;r.left=Date.now();
+    const msg='Step '+(r.i+1)+' of '+r.queue.length+': '+it.h;
+    try{if(window.AndroidAlarm.openSettingsHint)window.AndroidAlarm.openSettingsHint(it.w||it.k,msg);else window.AndroidAlarm.openSettings(it.w||it.k);}catch(e){try{window.AndroidAlarm.openSettings(it.w||it.k);}catch(_){}}},650);
 }
+function nextSetupStep(){const r=SETUP_RUN;if(!r)return;r.ask=false;r.i++;if(r.i>=r.queue.length){r.done=true;r.waiting=false;renderSheet();render();return;}renderSheet();setTimeout(runSetupStep,500);}
+/* Called when the app comes back to the front: the user has returned from a settings page. */
+function setupReturned(){
+  const r=SETUP_RUN;if(!r||!r.waiting||Date.now()-(r.left||0)<900)return;r.waiting=false;
+  const k=r.queue[r.i];
+  if(k==='autostart'){r.ask=true;renderSheet();return;}
+  setTimeout(nextSetupStep,450);
+}
+function setupSheet(){
+  const items=setupItems(),done=items.filter(i=>i.ok).length,r=SETUP_RUN;
+  const head=(n,t)=>'<div class="gs-kick">'+n+'</div><div class="gs-title">'+t+'</div>';
+  if(r&&r.done){
+    const left=items.filter(i=>!i.ok);
+    if(!left.length)return {title:'Phone setup',content:'<div class="gs-done"><span class="gs-okbig">'+tickSvg(40)+'</span>'+head('Phone setup','All set')+'<p class="gs-sub">Alarms will ring on time and the study lock is ready.</p></div>',foot:'<button class="btn btn-primary btn-block" data-action="setupClose">Done</button>'};
+    return {title:'Phone setup',content:'<div class="gs-done">'+head('Almost there',left.length+' still need'+(left.length===1?'s':'')+' you')+'<p class="gs-sub">Android didn’t report these as switched on yet.</p></div><div class="card setup-list">'+left.map(i=>setupRow(i)).join('')+'</div>',foot:'<button class="btn btn-primary btn-block" data-action="setupStart">Try again</button><button class="link skip" data-action="setupClose">Finish later</button>'};
+  }
+  if(r){
+    const it=items.find(x=>x.k===r.queue[r.i])||items[0],n=r.queue.length;
+    let c='<div class="gs-steps">'+r.queue.map((_,k)=>'<i class="'+(k<r.i?'done':k===r.i?'on':'')+'"></i>').join('')+'</div>';
+    c+='<div class="gs-step"><span class="gs-ic">'+svg(it.ic,30,1.9)+'</span>'+head('Step '+(r.i+1)+' of '+n,it.t)+'<p class="gs-sub">'+it.h+'</p>';
+    if(r.ask)c+='<p class="gs-q">Did you switch on Rexi Rise?</p><div class="gs-row"><button class="btn btn-ghost" data-action="setupAuto" data-v="0">Not yet</button><button class="btn btn-primary" data-action="setupAuto" data-v="1">Yes</button></div>';
+    else c+='<p class="gs-wait">'+(r.waiting?'Waiting for you to come back…':'Opening your phone’s settings…')+'</p>';
+    c+='</div>';
+    return {title:'Phone setup',content:c,foot:'<button class="btn btn-ghost btn-block gs-again" data-action="setupAgain">Open settings again</button><button class="link skip" data-action="setupSkip">Skip this step</button>'};
+  }
+  const left=items.length-done;
+  let c='<p class="sub" style="margin:0 0 12px">'+(left?left+' thing'+(left===1?'':'s')+' left so alarms and the study lock work.':'All set — alarms and the study lock have everything they need.')+'</p>';
+  c+='<div class="setup-bar"><i style="width:'+Math.round(done/items.length*100)+'%"></i></div>';
+  c+='<div class="card setup-list">'+items.map(i=>setupRow(i)).join('')+'</div>';
+  return {title:'Phone setup',content:c,foot:left?'<button class="btn btn-primary btn-block gs-go" data-action="setupStart"><b>Set up everything</b><small>'+left+' quick step'+(left===1?'':'s')+' · about '+(left>2?'1 minute':'30 seconds')+'</small></button>':'<button class="btn btn-primary btn-block" data-action="closeSheet">Done</button>'};
+}
+function setupRow(i){return '<div class="set-row"><span class="setup-ic'+(i.ok?' ok':'')+'">'+(i.ok?tickSvg(14):'')+'</span><div class="k">'+i.t+'<small>'+i.d+'</small></div>'+(i.ok?'':'<button class="btn btn-ghost btn-sm" data-action="fixPerm" data-w="'+(i.w||i.k)+'">'+(i.manual?'Open':'Allow')+'</button>')+'</div>';}
 function permProblems(){
   const st=nativeStatus();if(!st)return [];
   const out=[];
@@ -2726,7 +2785,7 @@ function speak(text,force){
     String(text).split(/(?<=[.!?])\s+/).forEach(part=>{const u=new SpeechSynthesisUtterance(part);if(v){u.voice=v;u.lang=v.lang;}u.rate=1;u.pitch=1.08;speechSynthesis.speak(u);});
   }catch(e){}
 }
-function closeSheet(){if(SHEET&&['sound','soundTracks'].includes(SHEET.kind))stopPreview();if(SHEET&&SHEET.kind==='packs'&&(SHEET.which==='random'||SHEET.which==='pool')){try{const c=missionDraft();if(c.pool&&c.pool.length<2)c.pool=null;}catch(e){}}if(SHEET&&SHEET.prev){SHEET=SHEET.prev;renderSheet();return;}SHEET=null;const el=$('#sheet');if(el)el.innerHTML='';document.body.classList.remove('sheet-open');}
+function closeSheet(){if(SHEET&&SHEET.kind==='setup')SETUP_RUN=null;if(SHEET&&['sound','soundTracks'].includes(SHEET.kind))stopPreview();if(SHEET&&SHEET.kind==='packs'&&(SHEET.which==='random'||SHEET.which==='pool')){try{const c=missionDraft();if(c.pool&&c.pool.length<2)c.pool=null;}catch(e){}}if(SHEET&&SHEET.prev){SHEET=SHEET.prev;renderSheet();return;}SHEET=null;const el=$('#sheet');if(el)el.innerHTML='';document.body.classList.remove('sheet-open');}
 function renderSheet(first){
   let el=$('#sheet');if(!el){el=document.createElement('div');el.id='sheet';document.body.appendChild(el);}
   if(!SHEET){el.innerHTML='';return;}
@@ -3766,9 +3825,12 @@ document.addEventListener('click',e=>{
     case 'allSubjects':openSheet({kind:'allSubjects'});break;
     // Streak days are only marked automatically by reaching a study goal (no manual mark or undo).
     case 'recapNext':if(RECAP){if(RECAP.i<RECAP.slides.length-1){RECAP.i++;drawRecap();}else{RECAP=null;drawRecap();}}break;
-    case 'openSetup':openSheet({kind:'setup'});break;
-    case 'setupDone':S.autostartDone=true;save();renderSheet();render();break;
-    case 'setupUndo':S.autostartDone=false;save();renderSheet();render();break;
+    case 'openSetup':SETUP_RUN=null;openSheet({kind:'setup'});break;
+    case 'setupStart':startSetup();break;
+    case 'setupSkip':nextSetupStep();break;
+    case 'setupAgain':runSetupStep();break;
+    case 'setupAuto':S.autostartDone=el.dataset.v==='1';save();nextSetupStep();break;
+    case 'setupClose':SETUP_RUN=null;closeSheet();render();break;
     case 'lateOk':try{window.AndroidAlarm.clearLate();}catch(e){}render();break;
     case 'recapClose':RECAP=null;drawRecap();break;
     case 'openRecap':openRecap(+el.dataset.n);break;
@@ -3964,7 +4026,7 @@ function toast(msg){let t=$('#toast');if(!t){t=document.createElement('div');t.i
   }
   window.__planner={state:()=>S,task:()=>M&&M.task,check:checkReminders,tick:focusTick,
     returnToStudy:()=>{if(!S.active)return false;focusTick();if(S.active.state!=='study')return false;SHEET=null;closeSheet();FOCUS_OPEN=true;renderFocus();return true;},
-    refresh:()=>{if(FOCUS_OPEN){focusTick();renderFocus();return;}if(!document.activeElement.matches('input,textarea'))render();if(SHEET&&(SHEET.kind==='focus'||SHEET.kind==='setup'))renderSheet();},
+    refresh:()=>{if(FOCUS_OPEN){focusTick();renderFocus();return;}if(!document.activeElement.matches('input,textarea'))render();if(SHEET&&(SHEET.kind==='focus'||SHEET.kind==='setup'))renderSheet();if(SHEET&&SHEET.kind==='setup')setupReturned();},
     blocked:label=>window.__focusBlocked(label),
     back:()=>{if(ASK){ASK.done(false);return true;}if(current)return true;if(document.getElementById('tour')){if(TOUR_I>0){TOUR_I--;renderTour();}return true;}if(SHEET){closeSheet();return true;}if(FOCUS_OPEN){if(BREAK_PICK){BREAK_PICK=false;renderFocus();return true;}if(canMinimise()){FOCUS_OPEN=false;closeFocus();render();}return true;}if(S.activeTab!=='home'){set({activeTab:'home'});scrollTo(0,0);return true;}return false;}};
   // No welcome tour: sign-up asks for the name, the + button adds alarms, Home shows any missing permissions.

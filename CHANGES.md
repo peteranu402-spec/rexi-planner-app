@@ -1,3 +1,9 @@
+## One-tap guided phone setup and tour fix — 11 October 2026
+
+- **Set up everything:** one button on Phone setup walks through only the settings still missing, in order: notifications (Android's Allow pop-up), battery (Allow pop-up, or Battery → Unrestricted when Android restricts the app), accessibility (opens Rexi Rise's own page on newer Android), Do Not Disturb access, Display over other apps, full-screen alarms, alarms & reminders, and auto-start. Each step shows "Step 2 of 4", the setting, and exactly what to switch on; a short hint also appears as the phone's settings page opens. Coming back to the app opens the next step automatically; auto-start asks "Did you switch on Rexi Rise?". Finishes with "All set", or lists anything Android still reports as off with Try again. Steps can be skipped or reopened.
+- Green ticks use a new optically centred tick, measured at 3× to be within 0.2 px of the circle's centre.
+- **New-user tour:** the first step's highlight could land 37 px below the Study / Alarms / Schedule tabs (over the Study card) because it was measured before the screen had settled. The highlight now re-measures its target every 150 ms and follows it; all four steps were checked to line up exactly at two phone sizes in light and dark mode.
+
 ## Full app checkup — 11 October 2026
 
 Walked every screen at phone size in Light and Dark mode with real-looking data: Home (Study, Alarms, Schedule), alarm menu, alarm editor, mission picker and panels, all 10 missions while ringing, sound pickers, Start studying, Focus settings, study timer, break picker, break, End early, exit questions and rejection, Plan (timetable, courses), Progress, See all sheets, recap, every Settings sheet, Phone setup and the Guide. No script errors, no screen scrolling sideways and no text running off the edge. Fixed:

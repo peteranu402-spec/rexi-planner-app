@@ -374,6 +374,20 @@ public class AlarmBridge {
         return o.toString();
     }
 
+    /** Guided setup: a short hint (e.g. "Turn on Rexi Rise, then press Back") shown as the settings page opens. */
+    @JavascriptInterface
+    public void openSettingsHint(final String which, final String hint) {
+        activity.runOnUiThread(() -> {
+            if (hint != null && !hint.trim().isEmpty()) {
+                try {
+                    android.widget.Toast.makeText(activity, hint, android.widget.Toast.LENGTH_LONG).show();
+                } catch (Exception ignored) {
+                }
+            }
+        });
+        openSettings(which);
+    }
+
     @JavascriptInterface
     public void openSettings(final String which) {
         activity.runOnUiThread(() -> {
@@ -381,10 +395,15 @@ public class AlarmBridge {
             Intent i = null;
             if ("notif".equals(which)) {
                 if (Build.VERSION.SDK_INT >= 33
-                        && activity.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
-                        && activity.shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
-                    activity.requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, NOTIF_REQ);
-                    return;
+                        && activity.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                    // Show Android's simple "Allow" pop-up the first time (and while Android still allows asking again).
+                    android.content.SharedPreferences ui = activity.getSharedPreferences("ui", android.content.Context.MODE_PRIVATE);
+                    boolean askedBefore = ui.getBoolean("notifAsked", false);
+                    if (!askedBefore || activity.shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
+                        ui.edit().putBoolean("notifAsked", true).apply();
+                        activity.requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, NOTIF_REQ);
+                        return;
+                    }
                 }
                 i = new Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS);
                 i.putExtra(Settings.EXTRA_APP_PACKAGE, pkg);
@@ -393,7 +412,10 @@ public class AlarmBridge {
             } else if ("exact".equals(which) && Build.VERSION.SDK_INT >= 31) {
                 i = new Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM, Uri.parse("package:" + pkg));
             } else if ("accessibility".equals(which)) {
-                i = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+                // Newer Android can open Rexi Rise's own accessibility page instead of the long list.
+                Intent d = new Intent("android.settings.ACCESSIBILITY_DETAILS_SETTINGS");
+                d.putExtra(Intent.EXTRA_COMPONENT_NAME, new ComponentName(activity, FocusBlockService.class).flattenToString());
+                i = d.resolveActivity(activity.getPackageManager()) != null ? d : new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
             } else if ("battery".equals(which)) {
                 i = new Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS, Uri.parse("package:" + pkg));
             } else if ("dndaccess".equals(which)) {
