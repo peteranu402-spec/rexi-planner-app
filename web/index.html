@@ -120,6 +120,13 @@ nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:6;display:flex;justify-c
 .pad{padding:18px}
 .h-sec{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:0 2px 10px}
 .al-head{position:relative;align-items:center}
+.setup-bar{height:6px;border-radius:6px;background:var(--line);overflow:hidden;margin:0 0 14px}.setup-bar i{display:block;height:100%;background:var(--brand);border-radius:6px}
+.setup-list .set-row{gap:12px;justify-content:flex-start}
+.setup-list .set-row .k{flex:1;min-width:0;text-align:left}
+.setup-ic{width:24px;height:24px;border-radius:50%;border:2px solid var(--faint);display:grid;place-items:center;flex:none;color:#fff}
+.setup-ic.ok{background:#2E9E5B;border-color:#2E9E5B}
+.setup-list .btn-sm{white-space:nowrap;flex:none}
+
 .late-alarm .btn-sm{white-space:nowrap}
 .recap{position:fixed;inset:0;z-index:96;background:var(--bg);color:var(--ink);display:flex;flex-direction:column;padding:calc(env(safe-area-inset-top) + 14px) 0 calc(env(safe-area-inset-bottom) + 12px);animation:fade .2s ease}
 .rc-top{display:flex;align-items:center;gap:14px;padding:0 18px}
@@ -2325,6 +2332,7 @@ function vSettings(){
   let h='';
   h+='<div><div class="h-sec"><h2>Alarm</h2></div><div class="card">'
     +sRow('gear','Alarm settings','Volume & vibration','openSet',' data-k="alarmset"')
+    +(IS_APP?sRow('shield','Phone setup',setupLeft()?setupLeft()+' to finish':'All set','openSetup','',setupLeft()?'<span class="dot-warn">'+setupLeft()+'</span>':''):'')
     +sRow('alert','Alarm not working?','','openSet',' data-k="alarmhelp"',(IS_APP&&permProblems().length?'<span class="dot-warn">'+permProblems().length+'</span>':''))
     +'</div></div>';
   h+='<div><div class="h-sec"><h2>Study</h2></div><div class="card">'
@@ -2544,6 +2552,31 @@ function nativeStatus(){
   if(!IS_APP)return null;
   try{return JSON.parse(window.AndroidAlarm.status());}catch(e){return null;}
 }
+
+/* ---------- Phone setup checklist: every phone setting the alarms and study lock depend on ---------- */
+function setupItems(){
+  const st=nativeStatus()||{},maker=String(st.maker||''),oem=/xiaomi|redmi|poco|tecno|infinix|itel|oppo|realme|vivo|huawei|honor|oneplus|samsung/.test(maker);
+  const items=[
+    {k:'notif',ok:st.notif!==false,t:'Notifications',d:'So alarms, break and goal alerts can show.'},
+    {k:'exact',ok:st.exact!==false,t:'Alarms & reminders',d:'Alarms ring at the exact minute.'},
+    {k:'fullscreen',ok:st.fullScreen!==false,t:'Full-screen alarms',d:'The alarm appears over your lock screen.'},
+    {k:'battery',ok:st.battery!==false&&st.bg!==false,t:'Battery: Unrestricted',d:'Your phone won’t hold alarms back to save power.',w:st.bg===false?'bg':'battery'},
+    {k:'accessibility',ok:blockerOn(),t:'Rexi Rise accessibility',d:'Needed for the study lock, the return after breaks and the screen timeout.'},
+    {k:'dndaccess',ok:st.dndAccess!==false,t:'Do Not Disturb access',d:'Only calls come through while you study.'},
+    {k:'overlay',ok:st.overlay!==false,t:'Display over other apps',d:'Brings you back to the study page when a break ends.'}];
+  if(oem)items.push({k:'autostart',ok:!!S.autostartDone,manual:true,t:'Auto-start',d:'Your phone’s phone-manager or security app. Tap Open, switch Rexi Rise on, then tap Done.'});
+  return items;
+}
+function setupLeft(){return IS_APP?setupItems().filter(i=>!i.ok).length:0;}
+function setupSheet(){
+  const items=setupItems(),done=items.filter(i=>i.ok).length;
+  let c='<p class="sub" style="margin:0 0 12px">'+(done===items.length?'All set — alarms and the study lock have everything they need.':'Rexi Rise needs these so alarms ring on time and the study lock works. '+(items.length-done)+' left.')+'</p>';
+  c+='<div class="setup-bar"><i style="width:'+Math.round(done/items.length*100)+'%"></i></div>';
+  c+='<div class="card setup-list">'+items.map(i=>'<div class="set-row"><span class="setup-ic'+(i.ok?' ok':'')+'">'+(i.ok?svg('check',15,3):'')+'</span><div class="k">'+i.t+'<small>'+i.d+'</small></div>'
+    +(i.ok?(i.manual?'<button class="btn btn-ghost btn-sm" data-action="setupUndo">Undo</button>':''):'<button class="btn btn-primary btn-sm" data-action="fixPerm" data-w="'+(i.w||i.k)+'">'+(i.manual?'Open':'Allow')+'</button>'+(i.manual?'<button class="btn btn-ghost btn-sm" data-action="setupDone">Done</button>':''))+'</div>').join('')+'</div>';
+  c+='<p class="help" style="margin-top:12px">Ticks update when you come back from your phone’s settings.</p>';
+  return {title:'Phone setup',content:c,foot:'<button class="btn btn-primary btn-block" data-action="closeSheet">'+(done===items.length?'Done':'Finish later')+'</button>'};
+}
 function permProblems(){
   const st=nativeStatus();if(!st)return [];
   const out=[];
@@ -2730,6 +2763,7 @@ function renderSheet(first){
       +'<div class="sh-label" style="margin-top:12px">3. Can this wait until your session ends at '+endAt+'?</div><div class="theme-seg wide">'+[['yes','Yes, it can wait'],['no','No, it can’t wait']].map(([v,l])=>'<button class="'+(SHEET.wait===v?'on':'')+'" data-action="exitWait" data-v="'+v+'">'+l+'</button>').join('')+'</div>'
       +(SHEET.err?'<p class="auth-err">'+esc(SHEET.err)+'</p>':'');
     foot='<button class="btn btn-primary btn-block" data-action="keepStudying">Keep studying</button><button class="link skip" data-action="exitReason">Check my reason</button>'; }
+  else if(SHEET.kind==='setup'){const r=setupSheet();title=r.title;content=r.content;foot=r.foot;}
   else if(SHEET.kind==='allSessions'){const r=allSessionsSheet();title=r.title;content=r.content;foot=r.foot;}
   else if(SHEET.kind==='allSubjects'){const r=allSubjectsSheet();title=r.title;content=r.content;foot=r.foot;}
   else if(SHEET.kind==='set'){const r=setSheet();title=r.title;content=r.content;foot=r.foot;}
@@ -3712,7 +3746,7 @@ document.addEventListener('click',e=>{
     case 'homeTab':set({homeTab:el.dataset.t});break;
     case 'toggleQuote':set({dailyQuote:S.dailyQuote===false});toast(S.dailyQuote!==false?'Daily focus is on — see you at 7:00 AM':'Daily focus notification off');break;
     case 'tourNext':TOUR_I=Math.min(COACH.length-1,TOUR_I+1);renderTour();break;
-    case 'tourDone':TOUR_I=0;closeTour();set({toured:true,homeTab:'study'});break;
+    case 'tourDone':TOUR_I=0;closeTour();set({toured:true,homeTab:'study'});if(IS_APP&&!S.setupSeen&&setupLeft()){S.setupSeen=true;save();setTimeout(()=>openSheet({kind:'setup'}),400);}break;
     case 'tab':set({activeTab:el.dataset.tab,prevTab:S.activeTab==='settings'?S.prevTab:S.activeTab});scrollTo(0,0);break;
     /* courses */
     case 'addCourse':S.courses.push({id:uid(),code:'',title:'',goal:'',grade:'',diff:'',exam:''});set({});setTimeout(()=>{const ins=document.querySelectorAll('[data-f="title"]');const last=ins[ins.length-1];if(last)last.focus();},30);break;
@@ -3731,6 +3765,9 @@ document.addEventListener('click',e=>{
     case 'allSubjects':openSheet({kind:'allSubjects'});break;
     // Streak days are only marked automatically by reaching a study goal (no manual mark or undo).
     case 'recapNext':if(RECAP){if(RECAP.i<RECAP.slides.length-1){RECAP.i++;drawRecap();}else{RECAP=null;drawRecap();}}break;
+    case 'openSetup':openSheet({kind:'setup'});break;
+    case 'setupDone':S.autostartDone=true;save();renderSheet();render();break;
+    case 'setupUndo':S.autostartDone=false;save();renderSheet();render();break;
     case 'lateOk':try{window.AndroidAlarm.clearLate();}catch(e){}render();break;
     case 'recapClose':RECAP=null;drawRecap();break;
     case 'openRecap':openRecap(+el.dataset.n);break;
@@ -3926,7 +3963,7 @@ function toast(msg){let t=$('#toast');if(!t){t=document.createElement('div');t.i
   }
   window.__planner={state:()=>S,task:()=>M&&M.task,check:checkReminders,tick:focusTick,
     returnToStudy:()=>{if(!S.active)return false;focusTick();if(S.active.state!=='study')return false;SHEET=null;closeSheet();FOCUS_OPEN=true;renderFocus();return true;},
-    refresh:()=>{if(FOCUS_OPEN){focusTick();renderFocus();return;}if(!document.activeElement.matches('input,textarea'))render();if(SHEET&&SHEET.kind==='focus')renderSheet();},
+    refresh:()=>{if(FOCUS_OPEN){focusTick();renderFocus();return;}if(!document.activeElement.matches('input,textarea'))render();if(SHEET&&(SHEET.kind==='focus'||SHEET.kind==='setup'))renderSheet();},
     blocked:label=>window.__focusBlocked(label),
     back:()=>{if(ASK){ASK.done(false);return true;}if(current)return true;if(document.getElementById('tour')){if(TOUR_I>0){TOUR_I--;renderTour();}return true;}if(SHEET){closeSheet();return true;}if(FOCUS_OPEN){if(BREAK_PICK){BREAK_PICK=false;renderFocus();return true;}if(canMinimise()){FOCUS_OPEN=false;closeFocus();render();}return true;}if(S.activeTab!=='home'){set({activeTab:'home'});scrollTo(0,0);return true;}return false;}};
   // No welcome tour: sign-up asks for the name, the + button adds alarms, Home shows any missing permissions.

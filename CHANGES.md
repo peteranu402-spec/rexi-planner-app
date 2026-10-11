@@ -1,3 +1,8 @@
+## Phone setup checklist and build upkeep — 11 October 2026
+
+- **Phone setup** (Settings → Phone setup, and shown once after the first-run tour): one checklist with a green tick for each phone setting Rexi Rise depends on — notifications, alarms & reminders, full-screen alarms, Battery Unrestricted / background restriction, Rexi Rise accessibility, Do Not Disturb access, Display over other apps, and Auto-start on phones that have it (marked Done by you, since Android can't report it). A progress bar shows how many are left; ticks refresh when you return from the phone's settings. The Settings row shows a badge with the number still to fix.
+- **Build:** GitHub Actions updated to supported versions (checkout v6, setup-java v5, setup-gradle v5, upload-artifact v6, action-gh-release v3; all Node 24) and the runner pinned to Ubuntu 24.04, ahead of GitHub retiring Node 20 actions and moving ubuntu-latest to Ubuntu 26.
+
 ## Alarms after a restart and missed-alarm notice — 11 October 2026
 
 - **Ring after a restart, before unlocking:** alarms are kept in Android's device-protected storage and the alarm receiver/ringing service are direct-boot aware, so if the phone restarts overnight (update, crash, battery died and was plugged in) Rexi Rise alarms ring even before you unlock the phone. Existing alarms are moved over automatically after updating. Before the first unlock the alarm rings with sound and its notification; the mission screen opens once you unlock.
