@@ -1,3 +1,9 @@
+## Alarms after a restart and missed-alarm notice — 11 October 2026
+
+- **Ring after a restart, before unlocking:** alarms are kept in Android's device-protected storage and the alarm receiver/ringing service are direct-boot aware, so if the phone restarts overnight (update, crash, battery died and was plugged in) Rexi Rise alarms ring even before you unlock the phone. Existing alarms are moved over automatically after updating. Before the first unlock the alarm rings with sound and its notification; the mission screen opens once you unlock.
+- **Missed while off:** after the phone is switched back on, an alarm missed in the last 15 minutes rings straight away; older ones (up to 36 hours) are reported in a "Missed alarm" notification, e.g. "Your 6:00 AM (Morning Alarm) alarm didn't ring because your phone was switched off." Study reminders are not reported.
+- An alarm cannot ring while the phone is fully switched off or the battery is flat; Android only allows that for some phone makers' own clock apps.
+
 ## Study page follows the phone's sleep timer — 11 October 2026
 
 - **Alarm reliability:** each scheduled alarm now records when it is due. If it rings more than 2 minutes late (the phone held the app back while it was closed — common on Tecno, Infinix, itel, Xiaomi, Oppo, Vivo), the Alarms tab shows "Your 6:00 AM alarm rang 23 min late" with Fix buttons for Battery → Unrestricted and auto-start, and a tip not to swipe the app away. The setup card now also flags Android's "background restricted" setting. Alarms are re-registered whenever the Rexi Rise service restarts, in case the phone cleared them.

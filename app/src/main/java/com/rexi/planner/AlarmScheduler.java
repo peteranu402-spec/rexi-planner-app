@@ -45,6 +45,7 @@ final class AlarmScheduler {
         }
 
         Set<String> codes = new HashSet<>();
+        JSONArray pending = new JSONArray();
         JSONObject schedule;
         try {
             schedule = new JSONObject(AlarmStore.schedule(c));
@@ -76,10 +77,83 @@ final class AlarmScheduler {
                 }
                 setExact(c, am, code, info.toString(), when);
                 codes.add(String.valueOf(code));
+                try {
+                    if (!"study".equals(a.optString("kind"))) {
+                        JSONObject rec = new JSONObject(info.toString());
+                        rec.put("due", when);
+                        pending.put(rec);
+                    }
+                } catch (JSONException ignored) {
+                }
             }
         }
-        p.edit().putStringSet("codes", codes).apply();
+        p.edit().putStringSet("codes", codes).putString("pending", pending.toString()).apply();
         DailyQuote.schedule(c);
+    }
+
+    /**
+     * After the phone was off: alarms whose time passed while it was off. One missed in the last 15 minutes rings now;
+     * older ones (up to 36 hours) are reported in a "missed alarm" notification. Call before scheduleAll().
+     */
+    static void handleMissedWhileOff(Context context) {
+        Context c = context.getApplicationContext();
+        SharedPreferences p = AlarmStore.prefs(c);
+        JSONArray pending;
+        try {
+            pending = new JSONArray(p.getString("pending", "[]"));
+        } catch (JSONException e) {
+            return;
+        }
+        long now = System.currentTimeMillis();
+        JSONObject ringNow = null;
+        java.util.List<String> missed = new java.util.ArrayList<>();
+        for (int i = 0; i < pending.length(); i++) {
+            JSONObject a = pending.optJSONObject(i);
+            if (a == null) continue;
+            long due = a.optLong("due", 0);
+            if (due <= 0 || due > now - 30_000L || due < now - 36L * 3600_000L) continue;
+            if (now - due <= 15L * 60_000L) {
+                if (ringNow == null || due > ringNow.optLong("due", 0)) ringNow = a;
+            } else {
+                java.text.DateFormat f = android.text.format.DateFormat.getTimeFormat(c);
+                String name = a.optString("title", a.optString("name", "")).trim();
+                missed.add(f.format(new java.util.Date(due)) + (name.isEmpty() || "Alarm".equals(name) ? "" : " (" + name + ")"));
+            }
+        }
+        p.edit().putString("pending", "[]").apply();
+        if (ringNow != null) {
+            Intent ring = new Intent(c, AlarmService.class);
+            ring.setAction(AlarmService.ACTION_RING);
+            ring.putExtra("info", ringNow.toString());
+            try {
+                c.startForegroundService(ring);
+            } catch (Exception e) {
+                AlarmService.postFallback(c, ringNow.toString());
+            }
+        }
+        if (missed.isEmpty()) return;
+        android.app.NotificationManager nm = c.getSystemService(android.app.NotificationManager.class);
+        if (nm == null) return;
+        AlarmService.ensureChannels(c);
+        String text = missed.size() == 1
+                ? "Your " + missed.get(0) + " alarm didn't ring because your phone was switched off."
+                : "These alarms didn't ring because your phone was switched off: " + android.text.TextUtils.join(", ", missed) + ".";
+        Intent open = new Intent(c, MainActivity.class);
+        open.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        PendingIntent pi = PendingIntent.getActivity(c, 7301, open, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        android.app.Notification n = new android.app.Notification.Builder(c, AlarmService.CHANNEL_MISSED)
+                .setSmallIcon(R.drawable.ic_stat_alarm)
+                .setContentTitle(missed.size() == 1 ? "Missed alarm" : "Missed alarms")
+                .setContentText(text)
+                .setStyle(new android.app.Notification.BigTextStyle().bigText(text))
+                .setColor(0xFFC4572F)
+                .setAutoCancel(true)
+                .setContentIntent(pi)
+                .build();
+        try {
+            nm.notify(7301, n);
+        } catch (Exception ignored) {
+        }
     }
 
     static void scheduleOneOff(Context context, String info, long when, int code) {

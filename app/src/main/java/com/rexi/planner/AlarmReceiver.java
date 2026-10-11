@@ -50,6 +50,10 @@ public class AlarmReceiver extends BroadcastReceiver {
                 AlarmService.postFallback(context, info == null ? "{}" : info);
             }
         }
+        if (Intent.ACTION_BOOT_COMPLETED.equals(action) || Intent.ACTION_LOCKED_BOOT_COMPLETED.equals(action)) {
+            // The phone was off: ring an alarm missed in the last few minutes, and report older ones.
+            AlarmScheduler.handleMissedWhileOff(context);
+        }
         // Weekly alarms: schedule the next occurrence (also handles boot / time changes).
         AlarmScheduler.scheduleAll(context);
     }
