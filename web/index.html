@@ -120,6 +120,26 @@ nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:6;display:flex;justify-c
 .pad{padding:18px}
 .h-sec{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:0 2px 10px}
 .al-head{position:relative;align-items:center}
+.recap{position:fixed;inset:0;z-index:96;background:var(--bg);color:var(--ink);display:flex;flex-direction:column;padding:calc(env(safe-area-inset-top) + 14px) 0 calc(env(safe-area-inset-bottom) + 12px);animation:fade .2s ease}
+.rc-top{display:flex;align-items:center;gap:14px;padding:0 18px}
+.rc-bars{flex:1;display:flex;gap:5px}.rc-bars i{flex:1;height:3px;border-radius:3px;background:var(--line)}.rc-bars i.on{background:var(--ink)}
+.rc-x{width:36px;height:36px;border-radius:50%;border:0;background:var(--surface-3);color:var(--muted);display:grid;place-items:center}
+.rc-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 28px;position:relative;overflow:hidden;cursor:pointer;animation:up .3s ease}
+.rc-k,.rc-kick{font:700 12.5px var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+.rc-rule{width:40px;height:1.5px;background:var(--line);margin:0 0 20px}
+.rc-h1{font:800 46px/1.05 var(--sans);letter-spacing:-.03em;color:var(--ink)}
+.rc-h2{font:800 34px/1.1 var(--sans);letter-spacing:-.02em;margin-top:16px}
+.rc-big{font:800 64px/1 var(--sans);letter-spacing:-.03em;background:linear-gradient(180deg,#E8925F,#C4572F);-webkit-background-clip:text;background-clip:text;color:transparent;padding:4px 0}
+.rc-big.sm{font-size:50px}
+.rc-sub{font:500 15px/1.45 var(--sans);color:var(--muted);margin-top:12px;max-width:300px}
+.rc-tap{position:absolute;bottom:26px;left:0;right:0;font:500 13px var(--sans);color:var(--faint)}
+.rc-ic{width:100px;height:100px;border-radius:50%;background:var(--accent-soft);color:var(--brand);display:grid;place-items:center}
+.rc-medal{width:96px;height:96px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#F3B496,#C4572F 60%,#8A3517);color:#fff;display:grid;place-items:center;font:800 40px var(--sans)}
+.rc-confetti{position:absolute;inset:18% 0 auto 0;height:30%;pointer-events:none}
+.rc-confetti i{position:absolute;width:9px;height:12px;border-radius:2.5px;opacity:.85;animation:rcpop .6s ease both}
+@keyframes rcpop{from{opacity:0;transform:scale(.3)}}
+.dot.ms-done{border:0;cursor:pointer;box-shadow:0 0 0 2px var(--bg),0 0 0 3.5px var(--brand)}
+
 .sl-auto{font:500 11.5px/1.35 var(--sans);color:var(--muted);text-align:right;flex:none}
 .dots-grid .dot{display:grid;place-items:center}
 .said{color:#2E9E5B;font-weight:inherit}
@@ -269,10 +289,7 @@ nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:6;display:flex;justify-c
 .alarm p{margin:0 0 24px;color:var(--hero-muted);font-size:14px}
 .alarm .btn{width:100%}
 .alarm .btn-ghost{color:var(--hero-ink);border-color:rgba(255,255,255,.18);margin-top:10px}
-.celebrate{text-align:center;color:#fff;position:relative;z-index:2;animation:pop .5s cubic-bezier(.2,1.4,.4,1)}
 .medal{width:130px;height:130px;margin:0 auto 18px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#F3B496,#C4572F 60%,#8A3517);display:grid;place-items:center;font:700 50px var(--display);color:#5A3608;box-shadow:0 0 0 8px rgba(247,216,138,.25),0 20px 50px -10px rgba(217,152,46,.6)}
-.celebrate .label{color:#F3B496}
-.celebrate h3{font:700 34px var(--display);margin:6px 0 2px}
 @keyframes pop{from{transform:scale(.6);opacity:0}to{transform:none;opacity:1}}
 .confetti{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:1}
 .confetti i{position:absolute;top:-20px;width:9px;height:14px;border-radius:2px;animation:fall linear forwards}
@@ -1435,7 +1452,7 @@ function vProgress(){
   // streak chain
   h+='<div><div class="h-sec"><h2>Streak</h2><span class="muted" style="font-size:12.5px">'+st.level+' · best '+(S.longest||0)+'d</span></div><div class="card pad"><div class="bar" style="height:8px;margin:0 0 6px"><i style="width:'+st.pct+'%"></i></div><p class="help" style="margin:0 0 14px">'+st.nextLabel+'. '+(st.checked?'Today is marked ✓ — you reached a study goal.':'Today is marked automatically when you reach a study session goal.')+' Missing a day never resets your streak.</p><div class="dots-grid">';
   for(let i=0;i<60;i++){const f=i<st.count,tgt=i===st.count&&!st.checked&&st.count<60,undo=st.checked&&i===st.count-1,ms=[7,14,30,60].includes(i+1);
-    h+='<span class="dot'+(f?' f':'')+(tgt?' tgt':'')+(ms&&!f?' ms':'')+'" aria-label="Day '+(i+1)+(f?' done':'')+'">'+(i+1)+'</span>';}
+    h+=(f&&ms?'<button class="dot f ms-done" data-action="openRecap" data-n="'+(i+1)+'" aria-label="Open your '+(i+1)+'-day recap">':'<span class="dot'+(f?' f':'')+(tgt?' tgt':'')+(ms&&!f?' ms':'')+'" aria-label="Day '+(i+1)+(f?' done':'')+'">')+(i+1)+(f&&ms?'</button>':'</span>');}
   h+='</div></div></div>';
   // recent sessions
   const rec=recentSessionRows();
@@ -2452,7 +2469,8 @@ function markToday(quiet){
   S.streakCount=count;S.lastCheckin=t;S.longest=Math.max(S.longest||0,count);save();
   if(!FOCUS_OPEN)render();
   const L=LEVELS.find(l=>l.at===count);
-  if(L&&!FOCUS_OPEN)celebrate(L,count);else if(!quiet)toast('Day '+count+' — keep the chain going!');
+  // Milestones (7, 14, 30, 60 days) open a Wayk-style recap of your studying so far, once the timer is closed.
+  if(L){S.pendingRecap=count;save();if(!FOCUS_OPEN)maybeRecap();}else if(!quiet)toast('Day '+count+' — keep the chain going!');
   return true;
 }
 function undoToday(){
@@ -2460,12 +2478,45 @@ function undoToday(){
   const count=Math.max(0,(S.streakCount||0)-1);
   set({streakCount:count,lastCheckin:count>0?y:''});
 }
-function celebrate(L,count){
-  const colors=['#E2734A','#C4572F','#D32F2F','#2E7D32','#F3C2A8','#E39A7C','#fff'];
-  let c='';for(let i=0;i<70;i++){c+='<i style="left:'+(Math.random()*100).toFixed(1)+'%;background:'+colors[i%colors.length]+';animation-duration:'+(2.4+Math.random()*2).toFixed(2)+'s;animation-delay:'+(Math.random()*.6).toFixed(2)+'s;transform:rotate('+Math.floor(Math.random()*360)+'deg);'+(Math.random()<.4?'border-radius:50%;height:9px':'')+'"></i>';}
-  $('#layer').innerHTML='<div class="overlay" data-action="closeCelebrate"><div class="confetti">'+c+'</div><div class="celebrate"><div class="medal">'+L.name.charAt(0)+'</div><div class="label">Level unlocked</div><h3>'+L.name+'</h3><div style="opacity:.8">'+count+'-day streak · Reward: '+L.reward+'</div><div style="margin-top:20px;font-size:13px;opacity:.6">Tap anywhere to continue</div></div></div>';
-  playChime();
+
+/* ---------- milestone recap (stories) ---------- */
+let RECAP=null;
+function recapStats(){
+  const ss=(S.sessions||[]).filter(x=>x&&x.studyMin>0);
+  if(!ss.length)return null;
+  const total=ss.reduce((a,x)=>a+x.studyMin,0),longest=ss.reduce((a,x)=>x.studyMin>a.studyMin?x:a,ss[0]);
+  const by=(k)=>{const m=new Map();ss.forEach(x=>{const v=x[k]||'';if(v)m.set(v,(m.get(v)||0)+x.studyMin);});return [...m].sort((a,b)=>b[1]-a[1]);};
+  const subj=by('course'),days=by('day'),blocks=by('block');
+  const first=ss.reduce((a,x)=>Math.min(a,x.start||Date.now()),Date.now());
+  return {total,count:ss.length,avg:total/ss.length,longest,subj:subj[0],subjects:subj.length,day:days[0],block:blocks[0],goals:ss.filter(x=>x.goalHit).length,first};
 }
+function fmtDay(d){return new Date(String(d)+'T00:00').toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'short'});}
+function recapSlides(count){
+  const st=recapStats(),L=LEVELS.find(l=>l.at===count)||{name:'',reward:''},sl=[];
+  const range=st?new Date(st.first).toLocaleDateString(undefined,{month:'short',day:'numeric'})+' – '+new Date().toLocaleDateString(undefined,{month:'short',day:'numeric'}):'';
+  sl.push('<div class="rc-kick">'+esc(range)+'</div><div class="rc-rule"></div><div class="rc-h1">'+count+' study days</div><div class="rc-sub">Here’s how your studying has gone so far'+(callName()?', '+esc(callName()):'')+'.</div><div class="rc-tap">Tap to continue</div>');
+  if(st){
+    sl.push('<div class="rc-k">Total study time</div><div class="rc-big">'+hm(st.total)+'</div><div class="rc-sub">across '+st.count+' session'+(st.count===1?'':'s')+'</div>');
+    sl.push('<div class="rc-k">Longest session</div><div class="rc-big">'+hm(st.longest.studyMin)+'</div><div class="rc-sub">'+esc(st.longest.course||'')+(st.longest.day?' · '+esc(fmtDay(st.longest.day)):'')+'</div>');
+    sl.push('<div class="rc-k">Average session</div><div class="rc-big">'+hm(Math.round(st.avg))+'</div>');
+    if(st.subj)sl.push('<div class="rc-k">Most-studied subject</div><div class="rc-ic">'+svg('bookOpen',40,1.8)+'</div><div class="rc-h2">'+esc(st.subj[0])+'</div><div class="rc-sub">'+hm(st.subj[1])+(st.subjects>1?' · '+st.subjects+' subjects in total':'')+'</div>');
+    if(st.day)sl.push('<div class="rc-k">Best day</div><div class="rc-big sm">'+esc(new Date(st.day[0]+'T00:00').toLocaleDateString(undefined,{weekday:'long'}))+'</div><div class="rc-sub">'+hm(st.day[1])+' on '+esc(fmtDay(st.day[0]))+'</div>');
+    if(st.block)sl.push('<div class="rc-k">You study best in the</div><div class="rc-ic">'+svg(st.block[0]==='Morning'?'sunrise':st.block[0]==='Night'?'moon':'sun',40,1.8)+'</div><div class="rc-h2">'+esc(st.block[0])+'</div><div class="rc-sub">'+hm(st.block[1])+' of your study time</div>');
+    sl.push('<div class="rc-k">Goals reached</div><div class="rc-big">'+st.goals+'</div><div class="rc-sub">session'+(st.goals===1?'':'s')+' finished on target</div>');
+  }
+  if(L.name)sl.push('<div class="rc-k">Level unlocked</div><div class="rc-medal">'+esc(L.name.charAt(0))+'</div><div class="rc-h2">'+esc(L.name)+'</div><div class="rc-sub">Reward: '+esc(L.reward)+'</div>');
+  sl.push('<div class="rc-confetti">'+confettiHTML(60)+'</div><div class="rc-sub">Keep studying with</div><div class="rc-h1">Rexi Rise</div>');
+  return sl;
+}
+function confettiHTML(n){const colors=['#E2734A','#C4572F','#2E9E5B','#3B82F6','#E0457B','#F3C2A8'];let c='';for(let i=0;i<n;i++)c+='<i style="left:'+(Math.random()*100).toFixed(1)+'%;top:'+(Math.random()*30).toFixed(1)+'%;background:'+colors[i%colors.length]+';transform:rotate('+Math.floor(Math.random()*360)+'deg);animation-delay:'+(Math.random()*.8).toFixed(2)+'s"></i>';return c;}
+function openRecap(count){RECAP={count,i:0,slides:recapSlides(count)};drawRecap();playChime();}
+function drawRecap(){
+  let el=$('#recap');if(!RECAP){if(el)el.remove();return;}
+  if(!el){el=document.createElement('div');el.id='recap';document.body.appendChild(el);}
+  const r=RECAP;
+  el.innerHTML='<div class="recap" role="dialog" aria-label="Your study recap"><div class="rc-top"><div class="rc-bars">'+r.slides.map((_,k)=>'<i class="'+(k<=r.i?'on':'')+'"></i>').join('')+'</div><button class="rc-x" data-action="recapClose" aria-label="Close">'+svg('x',18,2.2)+'</button></div><div class="rc-body" data-action="recapNext">'+r.slides[r.i]+'</div></div>';
+}
+function maybeRecap(){if(S.pendingRecap&&!FOCUS_OPEN&&!current&&!RECAP){const c=S.pendingRecap;S.pendingRecap=0;save();openRecap(c);}}
 
 /* ---------- audio ---------- */
 let AC=null,acIdle=null;
@@ -2957,6 +3008,7 @@ function endFocus(force){
   S.active=null;FOCUS_OPEN=false;BREAK_PICK=false;
   lockPhoneOff();save();focusSync();closeFocus();render();
   if(min>=1)playVoiceAlert('study_complete');
+  setTimeout(maybeRecap,1200);
   toast(min>=1?'Saved · '+hm(min)+' of '+a.course:'Session too short to save');
 }
 const EXIT_PHRASE='I am choosing to stop studying early today and I will make up for it';
@@ -3662,7 +3714,9 @@ document.addEventListener('click',e=>{
     case 'allSessions':openSheet({kind:'allSessions'});break;
     case 'allSubjects':openSheet({kind:'allSubjects'});break;
     // Streak days are only marked automatically by reaching a study goal (no manual mark or undo).
-    case 'closeCelebrate':$('#layer').innerHTML='';break;
+    case 'recapNext':if(RECAP){if(RECAP.i<RECAP.slides.length-1){RECAP.i++;drawRecap();}else{RECAP=null;drawRecap();}}break;
+    case 'recapClose':RECAP=null;drawRecap();break;
+    case 'openRecap':openRecap(+el.dataset.n);break;
     /* focus mode */
     case 'startFocus':case 'openFocus':openFocusStart();break;
     case 'fPick':SHEET.subj=el.dataset.n;SHEET.other='';if(document.activeElement)document.activeElement.blur();renderSheet();break;
@@ -3672,7 +3726,7 @@ document.addEventListener('click',e=>{
     case 'fBlock':SHEET.block=el.dataset.b;renderSheet();break;
     case 'fGo':{const names=namedCourses().map(courseName);let subj=SHEET.subj&&SHEET.subj!=='__other'?SHEET.subj:(SHEET.other||'').trim();if(!names.length)subj=(($('#fOther')||{}).value||SHEET.other||'').trim();{const m=names.find(n=>n.toLowerCase()===subj.toLowerCase());if(m)subj=m;}if(!subj){toast('Pick a subject first');buzz('wrong');return;}startFocus(subj,SHEET.goal,SHEET.block);break;}
     case 'focusSettings':openSheet({kind:'set',k:'focus',live:true,prev:SHEET});break;
-    case 'hideFocus':FOCUS_OPEN=false;closeFocus();render();break;
+    case 'hideFocus':FOCUS_OPEN=false;closeFocus();render();setTimeout(maybeRecap,300);break;
     case 'breakPick':BREAK_PICK=!BREAK_PICK;renderFocus();break;
     case 'fBreak':takeBreak(+el.dataset.m);break;
     case 'endBreak':endBreak(false);break;
@@ -3841,6 +3895,7 @@ function toast(msg){let t=$('#toast');if(!t){t=document.createElement('div');t.i
   })();
   render();
   if(FOCUS_OPEN)renderFocus();
+  setTimeout(maybeRecap,2600); // a milestone reached while the timer was open
   focusTimer=setInterval(focusTick,1000);
   setInterval(()=>{checkReminders();if(S.activeTab==='home'&&!FOCUS_OPEN&&!$('#layer').innerHTML&&!SHEET&&!document.activeElement.matches('input,textarea'))render();},30000);
   setTimeout(checkReminders,800);

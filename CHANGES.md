@@ -1,3 +1,8 @@
+## Milestone study recap — 11 October 2026
+
+- Reaching 7, 14, 30 and 60 study days opens a full-screen, Wayk-style recap you tap through: total study time and sessions, longest session (subject and date), average session, most-studied subject, best day, the time of day you study best, goals reached, the level unlocked, and a confetti finish. It waits until the study timer is closed, and filled milestone circles on the Progress page reopen it any time.
+- The old "Level unlocked" pop-up was removed; its level and reward now appear inside the recap.
+
 ## Automatic streak that never resets — 11 October 2026
 
 - A streak day is added only automatically, when you reach a study session goal. The "Mark today" button, tapping today's circle and undo were removed.

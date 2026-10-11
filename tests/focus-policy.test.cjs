@@ -4,7 +4,7 @@ const script=html.match(/<script>([\s\S]*?)<\/script>/)[1];
 new vm.Script(script); // Check the complete app script, including event handlers.
 let now=1000000,stops=0;
 const alerts=[];
-const ctx={Date:{now:()=>now},S:{focus:{rhythm:'90/15',maxBreaks:1,lock:'pin',voice:false},sessions:[],active:null},IS_APP:true,RHYTHMS:{'90/15':[90,15],'off':[0,0]},document:{addEventListener(){}},window:{AndroidAlarm:{focusUpdate(){return true},blockerOn(){return true},focusStop(){stops++},lockTask(){}}},setTimeout,clearTimeout,Math,JSON,toast(){},clock:ms=>Math.ceil(ms/1000)+'s',save(){},closeSheet(){},speak(){},playVoiceAlert:event=>alerts.push(event),line:x=>x[0],LINES:{start:()=>['start'],brk:()=>['break'],back:()=>['back'],end:()=>['end']},goalLabel:x=>x,uid:()=> 'session',todayISO:()=> '2026-10-07',nm:()=>'',callName:()=>'',buzz(){},render(){},hm:x=>String(x),openSheet:x=>ctx.SHEET=x,ask:()=>Promise.resolve(false),SHEET:null};
+const ctx={Date:{now:()=>now},S:{focus:{rhythm:'90/15',maxBreaks:1,lock:'pin',voice:false},sessions:[],active:null},IS_APP:true,RHYTHMS:{'90/15':[90,15],'off':[0,0]},document:{addEventListener(){}},window:{AndroidAlarm:{focusUpdate(){return true},blockerOn(){return true},focusStop(){stops++},lockTask(){}}},setTimeout,clearTimeout,Math,JSON,toast(){},clock:ms=>Math.ceil(ms/1000)+'s',save(){},closeSheet(){},speak(){},playVoiceAlert:event=>alerts.push(event),line:x=>x[0],LINES:{start:()=>['start'],brk:()=>['break'],back:()=>['back'],end:()=>['end']},goalLabel:x=>x,uid:()=> 'session',todayISO:()=> '2026-10-07',nm:()=>'',callName:()=>'',maybeRecap(){},buzz(){},render(){},hm:x=>String(x),openSheet:x=>ctx.SHEET=x,ask:()=>Promise.resolve(false),SHEET:null};
 ctx.QUOTES=['quote'];ctx.QUOTE_NOTES=['note'];ctx.dayOfYear=()=>0;
 vm.createContext(ctx);
 const study=html.match(/function activeStudyMs\(now\)\{[^\n]+/)[0];
@@ -94,7 +94,7 @@ exitInput.value='';exitInput.fire('input');assert.equal(exitInput.value,'','norm
 assert.ok(body.children[0].textContent.includes('Type the sentence yourself'));
 console.log('Early-exit phrase selection/copy, paste/drop and keyboard clipboard restrictions passed.');
 // Streak: marked automatically by reaching a study goal, and a missed day never resets it.
-{const sctx={S:{streakCount:6,lastCheckin:'2026-10-01',longest:6},LEVELS:[{at:7,name:'Rookie'},{at:14,name:'Steady'}],FOCUS_OPEN:true,save(){},render(){},toast(){},celebrate(){},today:'2026-10-11'};
+{const sctx={S:{streakCount:6,lastCheckin:'2026-10-01',longest:6},LEVELS:[{at:7,name:'Rookie'},{at:14,name:'Steady'}],FOCUS_OPEN:true,save(){},render(){},toast(){},maybeRecap(){},today:'2026-10-11'};
  sctx.todayISO=()=>sctx.today;sctx.addDays=(d,n)=>d;vm.createContext(sctx);
  vm.runInContext(html.slice(html.indexOf('function streakInfo(){'),html.indexOf('function gradeInfo(')),sctx);
  vm.runInContext(html.slice(html.indexOf('function markToday(quiet){'),html.indexOf('function undoToday(')),sctx);
